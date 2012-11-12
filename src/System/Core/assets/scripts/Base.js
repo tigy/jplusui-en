@@ -162,6 +162,7 @@
 			 * @param {String} targetProperty 要基于的属性名。
 			 * @param {String} setters=undefined 设置函数的方法名数组，用空格隔开。
 			 * @param {String} getters=undefined 获取函数的方法名数组，用空格隔开。
+             * @remark 使用此函数只能传递最多 3 个参数。
 			 * @example <pre>
 			 * MyClass.defineMethods('field', 'fn1 fn2 fn3');
 			 * </pre>
@@ -193,17 +194,20 @@
 				
 				// 最后使用 implement 添加成员。
 				return this.implement(Object.map(methods, function(fnName) {
-					return function() {
+				    return function (arg0, arg1, arg2) {
 						
 						// 获取实际调用的函数目标对象。
 						var target = propertyGetterFunc ? this[propertyGetterFunc]() : this[targetProperty],
 							r;
 							
 						assert(target, "#" + targetProperty + " 不能为空。");
-						assert(!target || Object.isFunction(target[fnName]), "#" + targetProperty + "." + fnName + "(): 不是函数。");
+						assert(!target || target[fnName], "#" + targetProperty + "." + fnName + "(): 不是函数。");
+
+						r = target[fnName];
 						
-						// 调用被代理的实际函数。
-						r = target[fnName].apply(target, arguments);
+				        // 调用被代理的实际函数。
+                        // 不能使用 .apply: IE 6/7 原生函数不是 function 。
+						r = r.apply ? r.apply(target, arguments) : r(arg0, arg1, arg2);
 						
 						// 如果不是 getter，返回 this 链式引用。
 						return target === r || r === undefined ? this : r;
@@ -715,45 +719,6 @@
 		}) : "";
 	};
 
-	/**
-	 * 将一个伪数组对象转为原生数组。
-	 * @param {Object} iterable 一个伪数组对象。
-	 * @param {Number} startIndex=0 转换开始的位置。
-	 * @return {Array} 返回新数组，其值和 *value* 一一对应。
-	 * @memberOf Array
-	 * @remark iterable 不支持原生的 DomList 对象。
-	 * @example
-	 * <pre>
-     * // 将 arguments 对象转为数组。
-     * Array.create(arguments); // 返回一个数组
-     *
-     * // 获取数组的子集。
-     * Array.create([4,6], 1); // [6]
-     *
-     * // 处理伪数组。
-     * Array.create({length: 1, "0": "value"}); // ["value"]
-     *
-     * </pre>
-	 */
-	Array.create = function (iterable, startIndex) {
-		// if(!iterable)
-		// return [];
-
-		// [DOM Object] 。
-		// if(iterable.item) {
-		// var r = [], len = iterable.length;
-		// for(startIndex = startIndex || 0; startIndex < len;
-		// startIndex++)
-		// r[startIndex] = iterable[startIndex];
-		// return r;
-		// }
-
-		assert(!iterable || toString.call(iterable) !== '[object HTMLCollection]' || typeof iterable.length !== 'number', 'Array.create(iterable, startIndex): {iterable} 不允许是 NodeList 。', iterable);
-
-		// 调用 slice 实现。
-		return iterable ? ap.slice.call(iterable, startIndex) : [];
-	};
-
 	/// #if CompactMode
 
 	/**
@@ -944,7 +909,7 @@
 			 * @type Boolean
 			 * @remark 就目前浏览器状况， IE6，7 中 isQuirks = true 其它浏览器都为 false 。
 			 */
-			isQuirks: !isStd && !Object.isObject(document.constructor),
+			isQuirks: !isStd && typeof document.constructor !== 'object',
 
 			/// #endif
 
@@ -1508,36 +1473,6 @@
 				this.push(value);
 			return exists;
 		},
-		
-		/// TODO: clear
-
-		/**
-		 * 将指定的 *value* 插入到当前数组的指定位置。
-		 * @param {Number} index 要插入的位置。索引从 0 开始。如果 *index* 大于数组的长度，则插入到末尾。
-		 * @param {Object} value 要插入的内容。
-		 * @return {Number} 返回实际插入到的位置。
-		 * @example
-		 * <pre>
-	     * ["I", "you"].insert(1, "love"); //   ["I", "love", "you"]
-	     * </pre>
-		 */
-		insert: function (index, value) {
-			assert.deprected("Array#insert 即将从 System.Core.Base 移除。要使用此函数，可引用 System.Utils.Array 组件。");
-			assert.isNumber(index, "Array#insert(index, value): {index} ~");
-			var me = this, tmp;
-			if (index < 0 || index >= me.length) {
-				me[index = me.length++] = value;
-			} else {
-				tmp = ap.slice.call(me, index);
-				me.length = index + 1;
-				this[index] = value;
-				ap.push.apply(me, tmp);
-			}
-			return index;
-
-		},
-		
-		/// TODO: clear
 
 		/**
 		 * 对当前数组的每个元素调用其指定属性名的函数，并将返回值放入新的数组返回。
