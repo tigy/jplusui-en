@@ -8,7 +8,7 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-			<title>J+ Core <xsl:value-of select="@version"/> API 文档 </title>
+			<title>J+ Core <xsl:value-of select="@version"/> API Documentation </title>
 			<link type="text/css" rel="stylesheet" rev="stylesheet" href="assets/styles/default.css" media="all" />
 			<script type="text/javascript" src="assets/scripts/jquery.js"></script>
 			<script type="text/javascript" src="assets/scripts/jquery-doc.js"></script>
@@ -16,10 +16,8 @@
 		<body id="docs">
 			<div id="header">
 				<div id="headerMain">
-					<h2>文档作者： <a href="http://webin.us/chunterg" target="_blank">chunterg</a> &amp; <a href="http://xuld.cnblogs.com" target="_blank">xuld</a>
-          </h2>
-					<h1>
-            J+ Core <xsl:value-of select="@version"/> API 文档</h1>
+					<h2>Document Written by <a href="http://shawphy.com">xuld</a> Translated by <a href="http://webin.us/">chunterg</a>.</h2>
+					<h1>J+ Core API Documentation</h1>
 				</div>
 			</div>
 			<div id="wrapper">
@@ -50,7 +48,7 @@
 		<li>
 			<h2>
 				<xsl:if test="@return">
-					<span>返回值:<xsl:value-of select="@return"/></span>
+					<span>Returns:<xsl:value-of select="@return"/></span>
 				</xsl:if>
 				<xsl:if test="self::function">
 					<xsl:value-of select="@name"/>(<xsl:for-each select="params">
@@ -72,7 +70,7 @@
 					<xsl:value-of select="@name"/>
 				</xsl:if>
 			</h2>
-			<h3>概述</h3>
+			<h3>Description</h3>
 			<div class="desc">
 				<p><xsl:value-of select="desc"/></p>
 				<div class="longdesc">
@@ -80,13 +78,13 @@
 				</div>
 			</div>
 			<xsl:if test="params">
-				<h3>参数</h3>
+				<h3>Parameters</h3>
 				<div>
 					<xsl:for-each select="params">
 						<h4>
-							<strong><xsl:value-of select="@name"/><xsl:if test="@optional"> <em> (可选)</em></xsl:if></strong>
+							<strong><xsl:value-of select="@name"/><xsl:if test="@optional"> <em> (optional)</em></xsl:if></strong>
 							<span><xsl:value-of select="@type"/></span>
-							<xsl:if test="@default"><em>默认值:'<xsl:value-of select="@default"/>'</em></xsl:if>
+							<xsl:if test="@default"><em>Default:'<xsl:value-of select="@default"/>'</em></xsl:if>
 						</h4>
 						<p>
 							<xsl:value-of select="desc" disable-output-escaping="yes"/>
@@ -95,13 +93,13 @@
 				</div>
 			</xsl:if>
 			<xsl:if test="option">
-				<h3>选项</h3>
+				<h3>Options</h3>
 				<div>
 					<xsl:for-each select="option">
 						<h4>
 							<strong><xsl:value-of select="@name"/></strong>
 							<span><xsl:value-of select="@type"/></span>
-							<xsl:if test="@default"><em>默认值:'<xsl:value-of select="@default"/>'</em></xsl:if>
+							<xsl:if test="@default"><em>Default:'<xsl:value-of select="@default"/>'</em></xsl:if>
 						</h4>
 						<p><xsl:value-of select="desc" disable-output-escaping="yes"/></p>
 						<xsl:if test="code">
@@ -112,7 +110,7 @@
 			</xsl:if>
 			<xsl:if test="example">
 				<div class="example">
-					<h3>示例</h3>
+					<h3>Examples:</h3>
 					<xsl:apply-templates select="example"/>
 				</div>
 			</xsl:if>
@@ -121,23 +119,23 @@
 
 	<xsl:template match="example">
 		<xsl:if test="desc">
-			<h4>描述:</h4>
+			<h4>Description:</h4>
 			<p><xsl:value-of select="desc"/></p>
 		</xsl:if>
 		<xsl:if test="css">
-			<h5>CSS 代码:</h5>
+			<h5>CSS Code:</h5>
 			<pre><code><xsl:value-of select="css"/></code></pre>
 		</xsl:if>
 		<xsl:if test="html">
-			<h5>HTML 代码:</h5>
+			<h5>HTML Code:</h5>
 			<pre><code><xsl:value-of select="html"/></code></pre>
 		</xsl:if>
 		<xsl:if test="code">
-			<h5>JS 代码:</h5>
+			<h5>JS Code:</h5>
 			<pre><code><xsl:value-of select="code"/></code></pre>
 		</xsl:if>
 		<xsl:if test="result">
-			<h5>返回值:</h5>
+			<h5>Returns:</h5>
 			<pre><code><xsl:value-of select="result"/></code></pre>
 		</xsl:if>
 	</xsl:template>

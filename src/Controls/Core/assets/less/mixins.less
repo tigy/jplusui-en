@@ -74,6 +74,13 @@
 	}
 }
 
+// IE7 inline-block
+// ----------------
+.ie6-border-transparent(@baseColor: #ffffff) {
+	 _border-color: @baseColor;
+    _filter: chroma(color=@baseColor);
+}
+
 // Sizing shortcuts
 // -------------------------
 .size(@height: 5px, @width: 5px) {
@@ -237,14 +244,6 @@
 					transform: skew(@x, @y);
 }
 
-// Background clipping
-// Heads up: FF 3.6 and under need "padding" instead of "padding-box"
-.background-clip(@clip: 0 0) {
-	-webkit-background-clip: @clip;
-		 -moz-background-clip: @clip;
-					background-clip: @clip;
-}
-
 // Background sizing
 .background-size(@size: 100%){
 	-webkit-background-size: @size;
@@ -341,7 +340,8 @@
         background-repeat: repeat-x;
     }
 
-	.ie7-vertical(@startColor: #555, @endColor: #333){
+	.vertical-all(@startColor: #555, @endColor: #333){
+		.vertical(@startColor, @endColor);
         filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor)));
 	}
 

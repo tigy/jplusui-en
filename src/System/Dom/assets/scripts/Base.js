@@ -119,10 +119,6 @@ using("System.Core.Base");
 			constructor: function(node) {
 				assert.isNode(node, "Dom#constructor(node): {node} 必须是 DOM 节点。");
 				this.node = node;
-
-				/// TODO: clear
-				this.dom = node;
-				/// TODO: clear
 			},
 		
 			/**
@@ -402,21 +398,6 @@ using("System.Core.Base");
 			preventDefault: function() {
 				this.returnValue = false;
 			},
-			
-			/// TODO: clear
-			
-			/**
-			 * 停止默认事件和冒泡。
-			 * @remark 此函数可以完全撤销事件。 事件处理函数中 return false 和调用 stop() 是不同的， return
-			 *         false 只会阻止当前事件其它函数执行， 而 stop() 只阻止事件冒泡和默认事件，不阻止当前事件其它函数。
-			 */
-			stop: function() {
-				assert.deprected('Dom.Event#stop() 已过时，请改用 return false 实现阻止事件。');
-				this.stopPropagation();
-				this.preventDefault();
-			},
-			
-			/// TODO: clear
 			
 			/**
 			 * 获取当前发生事件 Dom 对象。
@@ -1072,10 +1053,7 @@ using("System.Core.Base");
 	 	 * </pre>        
 		 */
 		parse: function(html, context, cachable) {
-
-			assert.notNull(html, 'Dom.parse(html, context, cachable): {html} ~');
-
-			return html.node ? html: new Dom(Dom.parseNode(html, context, cachable));
+		    return (html = Dom.parseNode(html, context, cachable)) ? html.nodeType ? new Dom(html) : html : null;
 		},
 
 		/**
@@ -1136,20 +1114,21 @@ using("System.Core.Base");
 		 * @return {Element/TextNode/DocumentFragment} 如果 HTML 是纯文本，返回 TextNode。如果 HTML 包含多个节点，返回 DocumentFragment 。否则返回 Element。
 	 	 * @static
 		 */
-		parseNode: function(html, context, cachable) {
+		parseNode: function (html, context, cachable) {
 
 			// 不是 html，直接返回。
 			if( typeof html === 'string') {
 
-				var srcHTML = html;
+			    var srcHTML = html;
+
+                // 仅缓存 512B 以内的 HTML 字符串。
+			    cachable = cachable !== false && srcHTML.length < 512;
+			    context = context && context.ownerDocument || document;
+
+			    assert(context.createElement, 'Dom.parseNode(html, context, cachable): {context} 必须是 DOM 节点。', context);
 
 				// 查找是否存在缓存。
-				html = cache[srcHTML];
-				context = context && context.ownerDocument || document;
-
-				assert(context.createElement, 'Dom.parseNode(html, context, cachable): {context} 必须是 DOM 节点。', context);
-
-				if(html && html.ownerDocument === context) {
+			    if (cachable && (html = cache[srcHTML]) && html.ownerDocument === context) {
 
 					// 复制并返回节点的副本。
 					html = html.cloneNode(true);
@@ -1157,8 +1136,7 @@ using("System.Core.Base");
 				} else {
 
 					// 测试查找 HTML 标签。
-					var tag = /<([\w:]+)/.exec(srcHTML);
-					cachable = cachable !== false;
+					var tag = /<([!\w:]+)/.exec(srcHTML);
 
 					if(tag) {
 
@@ -1192,11 +1170,20 @@ using("System.Core.Base");
 						if (html.previousSibling) {
 							wrap = html.parentNode;
 
-							assert(context.createDocumentFragment, 'Dom.parseNode(html, context, cachable): {context} 必须是 DOM 节点。', context);
-							html = context.createDocumentFragment();
-							while (wrap.firstChild) {
-								html.appendChild(wrap.firstChild);
+							//if (createDocumentFragment) {
+							//    assert(context.createDocumentFragment, 'Dom.parseNode(html, context, cachable): {context} 必须是 DOM 节点。', context);
+							//    html = context.createDocumentFragment();
+							//    while (wrap.firstChild) {
+							//        html.appendChild(wrap.firstChild);
+							//    }
+							//} else {
+							html = new DomList();
+							for (srcHTML = wrap.firstChild; srcHTML; srcHTML = srcHTML.nextSibling) {
+							    html.push(srcHTML);
 							}
+
+							cachable = false;
+							//}
 						} else {
 
 							// 删除用于创建节点的父 DIV 标签。
@@ -1249,15 +1236,6 @@ using("System.Core.Base");
 			}
 			return match(elem, selector);
 		},
-		
-		/// TODO: clear
-		
-		hasChild: function(elem, child){
-			assert.deprected("Dom.hasChild 已过时，请改用 Dom.has");
-			return Dom.has(elem, child);
-		},
-		
-		/// TODO: clear
 
 		/**
 		 * 判断指定节点之后有无存在子节点。
@@ -1777,14 +1755,6 @@ using("System.Core.Base");
 		implementIf: function(obj, listType) {
 			return this.implement(obj, listType, true);
 		},
-	
-		//// TODO: clear it
-		define: function(ctrl, target, setters, getters) {
-			assert.deprected("Dom.define(ctrl, target, setters, getters) 已过时，请使用 MyClass.defineMethods(target, methods)");
-
-			return ctrl.defineMethods(target, (setters + " " +  getters).trim());
-		},
-		//// TODO: clear it
 
 		/**
 		 * 表示事件的参数。
@@ -2150,7 +2120,7 @@ using("System.Core.Base");
 					
 				// .on(event, value)
 				} else if (/^on(\w+)/.test(key))
-					me.on(RegExp.$1, value);
+				    value && me.on(RegExp.$1, value);
 
 				// .setAttr(attr, value);
 				else
@@ -3281,15 +3251,6 @@ using("System.Core.Base");
 			return Dom.isHidden(this.node);
 		},
 		
-		/// TODO: clear
-		
-		hasChild: function(dom, allowSelf){
-			assert.deprected("Dom#hasChild 已过时，请改用 Dom#has");
-			return this.has(dom, allowSelf);
-		},
-		
-		/// TODO: clear
-		
 		/**
 		 * 判断一个节点是否有子节点。
 		 * @param {Dom} dom 子节点。
@@ -3391,8 +3352,18 @@ using("System.Core.Base");
 		}
 
 	}, function(value, key) {
-		dp[key] = function(html) {
-			html = Dom.parse(html, this);
+	    dp[key] = function (html) {
+
+	        html = Dom.parse(html, this);
+
+	        if (!html) {
+	            return html;
+	        } else if(html instanceof DomList){
+	            for (var i = 0; i < html.length; i++) {
+	                dp[key].call(this, html[i]);
+	            }
+	            return html;
+	        }
 
 			var scripts,
 				i = 0,
@@ -3410,7 +3381,7 @@ using("System.Core.Base");
 				if (!script.type || /\/(java|ecma)script/i.test(script.type)) {
 
 					if (script.src) {
-						assert(window.Ajax && Ajax.send, "必须载入 System.Request.Script 模块以支持动态执行 <script src=''>");
+						assert(window.Ajax && Ajax.send, "必须载入 System.Ajax.Script 模块以支持动态执行 <script src=''>");
 						Ajax.send({
 							url: script.src,
 							type: "GET",
@@ -3537,13 +3508,7 @@ using("System.Core.Base");
 	/// #endif
 
 		domReady = 'DOMContentLoaded';
-		t = Event.prototype;
-		
-		/// TODO: clear
-		t.stop = ep.stop;
-		
-		/// TODO: clear
-		t.getTarget = ep.getTarget;
+		Event.prototype.getTarget = ep.getTarget;
 		
 	/// #if CompactMode
 	
@@ -3553,11 +3518,6 @@ using("System.Core.Base");
 		
 		defaultEvent.initEvent = function (e) {
 			e.target = e.srcElement;
-		
-		/// TODO: clear
-			e.stop = ep.stop;
-		
-		/// TODO: clear
 			e.getTarget = ep.getTarget;
 			e.stopPropagation = ep.stopPropagation;
 			e.preventDefault = ep.preventDefault;

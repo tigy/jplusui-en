@@ -1,0 +1,2545 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type='text/xsl' href='assets/styles/default.xsl'?>
+
+<docs version="1.0">
+  <cat value="Core">
+    <subcat value="DOM Core method">
+      <function name="Dom.get" return="Dom">
+        <desc>Selects a single element with the given id attribute.</desc>
+        <longdesc>This method is extremely efficient for selector, and returns an encapsulated DOM object which can use most Dom funtions of jPlus UI. If the element you need to select is exsist，returns null. This method can short for $. </longdesc>
+        <params name="id" type="String">
+          <desc>The id of element</desc>
+        </params>
+        <example>
+          <desc>Finds the element with the id "a". </desc>
+          <html>&lt;p id="a"&gt;once&lt;/p&gt; &lt;div&gt;&lt;p&gt;two&lt;/p&gt;&lt;/div&gt; &lt;p&gt;three&lt;/p&gt;</html>
+          <code>Dom.get("a");</code>
+          <result>{&lt;p id="a"&gt;once&lt;/p&gt;}</result>
+        </example>
+      </function>
+      <function name="Dom.get" return="Dom">
+        <desc>Encapsulate any element into a DOM object. </desc>
+        <longdesc>This method returns an encapsulated DOM object which can use most DOM funtions of jPlus UI. If the element you need to select is exsist，returns null. This method can short for $. </longdesc>
+        <params name="dom" type="Node/NodeList/Dom/DomList/Array">
+          <desc>javascript DOM element/elements, encapsulated DOM object/objects, array. </desc>
+        </params>
+        <example>
+          <desc>Get an encapsulated DOM object with id "a1"</desc>
+          <html>&lt;p id="a1"&gt;&lt;/p&gt; &lt;p id="a2"&gt;&lt;/p&gt; </html>
+        </example>
+        <example>
+          <code>Dom.get(document.getElecmentById('a1')) // the same as Dom.get('a1')</code>
+        </example>
+        <example>
+          <code>Dom.get(['a1', 'a2']); // the same as Dom.get('a1')</code>
+        </example>
+        <example>
+          <code>Dom.get(Dom.get('a1')); // the same as Dom.get('a1')</code>
+          <result>{&lt;p id="a1"&gt;&lt;/p&gt;}</result>
+        </example>
+      </function>
+      <function name="Dom.query" return="DomList">
+        <desc>Select elements by CSS seletor. </desc>
+        <longdesc>
+          Support select all elements by given id, class, tag, also support CSS3 expression, multiple selecor. If no element be found, returns an empty DomList object. This method is short for $$ .  </longdesc>
+        <params name="doms" type="String/NodeList/DomList/Array">
+          <desc>CSS seletor, or javascript DOM elements, encapsulated DOM objects, array </desc>
+        </params>
+        <example>
+          <desc>Finds every p element. </desc>
+          <html>&lt;p&gt;one&lt;/p&gt; &lt;div&gt;&lt;p&gt;two&lt;/p&gt;&lt;/div&gt; &lt;p&gt;three&lt;/p&gt;</html>
+          <code>Dom.query("p");</code>
+          <result>[  &lt;p&gt;one&lt;/p&gt; ,&lt;p&gt;two&lt;/p&gt;, &lt;p&gt;three&lt;/p&gt;  ]</result>
+        </example>
+        <example>
+          <desc>Finds all p elements，which are the children of div element. </desc>
+          <html>&lt;p&gt;one&lt;/p&gt; &lt;div&gt;&lt;p&gt;two&lt;/p&gt;&lt;/div&gt; &lt;p&gt;three&lt;/p&gt;</html>
+          <code>Dom.query("div &gt; p");</code>
+          <result>[ &lt;p&gt;two&lt;/p&gt; ]</result>
+        </example>
+        <example>
+          <desc>Finds all input with a attribute "type" is "radio". </desc>
+          <code>Dom.query("input[type=radio]");</code>
+        </example>
+      </function>
+      <function name="Dom.parse" return="Dom">
+        <desc>Pasre a HTML string and create a node in DOM, returns an encapsulated DOM object. </desc>
+        <longdesc> When create a signle DOM element, don't forget the closing tag. </longdesc>
+        <params name="html" type="String">
+          <desc>a HTML string</desc>
+        </params>
+        <params name="ownerDocument" type="Document" optional="true">
+          <desc>The document which the node need to be created </desc>
+        </params>
+        <example>
+          <desc>Create a div element and append it to body.</desc>
+          <code>Dom.parse("&lt;div&gt;&lt;p&gt;Hello&lt;/p&gt;&lt;/div&gt;").appendTo(document.body);</code>
+          <result>[&lt;div&gt;&lt;p&gt;Hello&lt;/p&gt;&lt;/div&gt;]</result>
+        </example>
+        <example>
+          <desc>If you want to create a &lt;input&gt;, you must set type attribute at the same time. Because the IE only support the input with type when the element is created and the type can't be changed. </desc>
+          <code>// Unavailable in IE:
+Dom.parse("&lt;input&gt;").setAttr("type", "checkbox");
+// Available in IE:
+Dom.parse("&lt;input type='checkbox'&gt;");</code>
+        </example>
+      </function>
+      <function name="Dom.create" return="Dom">
+        <desc>Create a specified tag, returns an encapsulated DOM object. </desc>
+        <longdesc>If you create an empty node, it will be the same as document.createElement </longdesc>
+        <params name="tagName" type="String">
+          <desc>The tag name. </desc>
+        </params>
+        <params name="className" type="String" optional="true">
+          <desc>The class name to the tag. </desc>
+        </params>
+        <example>
+          <desc>Create a div element and append it to body.</desc>
+          <code>Dom.create("div").appendTo(document.body);</code>
+        </example>
+        <example>
+          <desc>Create a div element with class name "className". </desc>
+          <code>Dom.create("div", "className");</code>
+          <result>{&lt;div class="className"&gt;&lt;/div&gt;}</result>
+        </example>
+      </function>
+      <function name="Dom.ready" return="void">
+        <desc>Specify a function to execute when the DOM is fully loaded. </desc>
+        <longdesc></longdesc>
+        <params name="callback" type="Function">
+          <desc>A function to execute after the DOM is ready.</desc>
+        </params>
+        <example>
+          <desc>Call an anonymous when the DOM is ready</desc>
+          <code>Dom.ready(function(){
+              code start
+          });</code>
+        </example>
+      </function>
+      <function name="Dom.load" return="void">
+        <desc>A function to execute after the page is loaded complete. </desc>
+        <longdesc></longdesc>
+        <params name="callback" type="Function">
+          <desc>A function to execute after the age is loaded.</desc>
+        </params>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="Selector">
+    <subcat value="Basic">
+      <selector name="id" return="DomList">
+        <sample>#id</sample>
+        <desc>Finds an element with specified id. </desc>
+        <longdesc>If the selector contains special symbols, please escape with "\\". see the example below. </longdesc>
+        <params name="id" type="String">
+          <desc>The specified id</desc>
+        </params>
+        <example>
+          <desc>Finds an element with id "myDiv". </desc>
+          <html>
+            &lt;div id="notMe"&gt;&lt;p&gt;id="notMe"&lt;/p&gt;&lt;/div&gt;
+            &lt;div id="myDiv"&gt;id="myDiv"&lt;/div&gt;
+          </html>
+          <code>Dom.query("#myDiv");</code>
+          <result>[ &lt;div id="myDiv"&gt;id="myDiv"&lt;/div&gt; ]</result>
+        </example>
+        <example>
+          <desc>Finds an element with id that contains special symbols.</desc>
+          <html>
+            &lt;span id="foo:bar"&gt;&lt;/span&gt;
+            &lt;span id="foo[bar]"&gt;&lt;/span&gt;
+            &lt;span id="foo.bar"&gt;&lt;/span&gt;
+          </html>
+          <code>
+            Dom.query("#foo\\:bar")
+            Dom.query("#foo\\[bar\\]")
+            Dom.query("#foo\\.bar")
+          </code>
+        </example>
+      </selector>
+      <selector name="element" return="DomList">
+        <sample>element</sample>
+        <desc>Selects all elements with the given tag name.</desc>
+        <params name="element" type="String">
+          <desc>An element to search for. Refers to the tagName of DOM nodes. </desc>
+        </params>
+        <example>
+          <desc>Finds every DIV element. </desc>
+          <html>
+            &lt;div&gt;DIV1&lt;/div&gt;
+            &lt;div&gt;DIV2&lt;/div&gt;
+            &lt;span&gt;SPAN&lt;/span&gt;
+          </html>
+          <code>Dom.query("div");</code>
+          <result>[ &lt;div&gt;DIV1&lt;/div&gt;, &lt;div&gt;DIV2&lt;/div&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="class" return="DomList">
+        <sample>.class</sample>
+        <desc>Selects all elements with the given class.</desc>
+        <longdesc>For class selectors, jQuery uses JavaScript's native document.querySelectorAll() function if the browser supports it.</longdesc>
+        <params name="class" type="String">
+          <desc>A class to search for. An element can have multiple classes; only one of them must match. </desc>
+        </params>
+        <example>
+          <desc>Finds the element with the class "myClass".</desc>
+          <html>
+            &lt;div class="notMe"&gt;div class="notMe"&lt;/div&gt;
+            &lt;div class="myClass"&gt;div class="myClass"&lt;/div&gt;
+            &lt;span class="myClass"&gt;span class="myClass"&lt;/span&gt;
+          </html>
+          <code>Dom.query(".myClass");</code>
+          <result>[ &lt;div class="myClass"&gt;div class="myClass"&lt;/div&gt;, &lt;span class="myClass"&gt;span class="myClass"&lt;/span&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="all" return="DomList">
+        <sample>*</sample>
+        <desc>Selects all elements.</desc>
+        <longdesc>The all, or universal, selector is extremely slow, except when used by itself. </longdesc>
+        <example>
+          <desc>Find every element in document</desc>
+          <html>
+            &lt;div&gt;DIV&lt;/div&gt;
+            &lt;span&gt;SPAN&lt;/span&gt;
+            &lt;p&gt;P&lt;/p&gt;
+          </html>
+          <code>Dom.query("*")</code>
+          <result>[ &lt;div&gt;DIV&lt;/div&gt;, &lt;span&gt;SPAN&lt;/span&gt;, &lt;p&gt;P&lt;/p&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="multiple" return="DomList">
+        <sample>selector1,selector2,selectorN</sample>
+        <desc> Selects the combined results of all the specified selectors. </desc>
+        <longdesc>You can specify any number of selectors to combine into a single result. </longdesc>
+        <params name="selector1" type="Selector">
+          <desc>Any valid selector.</desc>
+        </params>
+        <params name="selector2" type="Selector">
+          <desc>Another valid selector.</desc>
+        </params>
+        <params name="selectorN" type="Selector" optional="true">
+          <desc>As many more valid selectors as you like.</desc>
+        </params>
+        <example>
+          <desc>Finds the elements that match any of these three selectors. </desc>
+          <html>
+            &lt;div&gt;div&lt;/div&gt;
+            &lt;p class="myClass"&gt;p class="myClass"&lt;/p&gt;
+            &lt;span&gt;span&lt;/span&gt;
+            &lt;p class="notMyClass"&gt;p class="notMyClass"&lt;/p&gt;
+          </html>
+          <code>Dom.query("div,span,p.myClass")</code>
+          <result>[ &lt;div&gt;div&lt;/div&gt;, &lt;p class="myClass"&gt;p class="myClass"&lt;/p&gt;, &lt;span&gt;span&lt;/span&gt; ]</result>
+        </example>
+      </selector>
+    </subcat>
+    <subcat value="Hierarchy">
+      <selector name="descendant" return="DomList">
+        <sample>ancestor descendant</sample>
+        <desc>Selects all elements that are descendants of a given ancestor.</desc>
+        <params name="ancestor" type="Selector">
+          <desc>Any valid selector.</desc>
+        </params>
+        <params name="descendant" type="Selector">
+          <desc>A selector to filter the descendant elements.</desc>
+        </params>
+        <example>
+          <desc>Finds all input descendants of forms.</desc>
+          <html>
+            &lt;form&gt;
+            &lt;label&gt;Name:&lt;/label&gt;
+            &lt;input name="name" /&gt;
+            &lt;fieldset&gt;
+            &lt;label&gt;Newsletter:&lt;/label&gt;
+            &lt;input name="newsletter" /&gt;
+            &lt;/fieldset&gt;
+            &lt;/form&gt;
+            &lt;input name="none" /&gt;
+          </html>
+          <code>Dom.query("form input")</code>
+          <result>[ &lt;input name="name" /&gt;, &lt;input name="newsletter" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="child" return="DomList">
+        <sample>parent &gt; child</sample>
+        <desc>Selects all direct child elements specified by "child" of elements specified by "parent".</desc>
+        <params name="parent" type="Selector">
+          <desc>Any valid selector.</desc>
+        </params>
+        <params name="child" type="Selector">
+          <desc>A selector to filter the child elements.</desc>
+        </params>
+        <example>
+          <desc>Finds all input which are the direct child of form. </desc>
+          <html>
+            &lt;form&gt;
+            &lt;label&gt;Name:&lt;/label&gt;
+            &lt;input name="name" /&gt;
+            &lt;fieldset&gt;
+            &lt;label&gt;Newsletter:&lt;/label&gt;
+            &lt;input name="newsletter" /&gt;
+            &lt;/fieldset&gt;
+            &lt;/form&gt;
+            &lt;input name="none" /&gt;
+          </html>
+          <code>Dom.query("form &gt; input")</code>
+          <result>[ &lt;input name="name" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="next" return="DomList">
+        <sample>prev + next</sample>
+        <desc>Selects all next elements matching "next" that are immediately preceded by a sibling "prev".</desc>
+        <params name="prev" type="Selector">
+          <desc>Any valid selector.</desc>
+        </params>
+        <params name="next" type="Selector">
+          <desc>A selector to match the element that is next to the first selector.</desc>
+        </params>
+        <example>
+          <desc>Finds all inputs that are next to a label.</desc>
+          <html>
+            &lt;form&gt;
+            &lt;label&gt;Name:&lt;/label&gt;
+            &lt;input name="name" /&gt;
+            &lt;fieldset&gt;
+            &lt;label&gt;Newsletter:&lt;/label&gt;
+            &lt;input name="newsletter" /&gt;
+            &lt;/fieldset&gt;
+            &lt;/form&gt;
+            &lt;input name="none" /&gt;
+          </html>
+          <code>Dom.query("label + input")</code>
+          <result>[ &lt;input name="name" /&gt;, &lt;input name="newsletter" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="siblings" return="DomList">
+        <sample>prev ~ siblings</sample>
+        <desc>Selects all sibling elements that follow after the "prev" element, have the same parent, and match the filtering "siblings" selector.</desc>
+        <params name="prev" type="Selector">
+          <desc>Any valid selector.</desc>
+        </params>
+        <params name="siblings" type="Selector">
+          <desc>A selector to filter elements that are the following siblings of the first selector.</desc>
+        </params>
+        <example>
+          <desc>Finds all inputs which have the same paren with form.</desc>
+          <html>
+            &lt;form&gt;
+            &lt;label&gt;Name:&lt;/label&gt;
+            &lt;input name="name" /&gt;
+            &lt;fieldset&gt;
+            &lt;label&gt;Newsletter:&lt;/label&gt;
+            &lt;input name="newsletter" /&gt;
+            &lt;/fieldset&gt;
+            &lt;/form&gt;
+            &lt;input name="none" /&gt;
+          </html>
+          <code>Dom.query("form ~ input")</code>
+          <result>[ &lt;input name="none" /&gt; ]</result>
+        </example>
+      </selector>
+    </subcat>
+    <subcat value="Attribute">
+      <selector name="attributeHas" return="DomList">
+        <sample>[attribute]</sample>
+        <desc>Selects elements that have the specified attribute.</desc>
+        <params name="attribute" type="String">
+          <desc>An attribute name.</desc>
+        </params>
+        <example>
+          <desc>Finds all divs with a id attribute.</desc>
+          <html>
+            &lt;div&gt;
+            &lt;p&gt;Hello!&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div id="test2"&gt;&lt;/div&gt;
+          </html>
+          <code>Dom.query("div[id]")</code>
+          <result>[ &lt;div id="test2"&gt;&lt;/div&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="attributeEquals" return="DomList">
+        <sample>[attribute=value]</sample>
+        <desc>Selects elements that have the specified attribute with a value exactly equal to a certain value.</desc>
+        <params name="attribute" type="String">
+          <desc>An attribute name.</desc>
+        </params>
+        <params name="value" type="String" optional="true">
+          <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
+        </params>
+        <example>
+          <desc>Finds all inputs with a name of "newsletter" </desc>
+          <html>
+            &lt;input type="checkbox" name="newsletter" value="Hot Fuzz" /&gt;
+            &lt;input type="checkbox" name="newsletter" value="Cold Fusion" /&gt;
+            &lt;input type="checkbox" name="accept" value="Evil Plans" /&gt;
+          </html>
+          <code>Dom.query("input[name='newsletter']").attr("checked", true);</code>
+          <result>[ &lt;input type="checkbox" name="newsletter" value="Hot Fuzz" checked="true" /&gt;, &lt;input type="checkbox" name="newsletter" value="Cold Fusion" checked="true" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="attributeNotEqual" return="DomList">
+        <sample>[attribute!=value]</sample>
+        <desc>Select elements that either don't have the specified attribute, or do have the specified attribute but not with a certain value. </desc>
+        <longdesc>This selector is equivalent to :not([attr="value"]).</longdesc>
+        <params name="attribute" type="String">
+          <desc>An attribute name.</desc>
+        </params>
+        <params name="value" type="String" optional="true">
+          <desc>An attribute value. Can be either an unquoted single word or a quoted string. </desc>
+        </params>
+        <example>
+          <desc>Finds all inputs that don't have the name 'newsletter'.</desc>
+          <html>
+            &lt;input type="checkbox" name="newsletter" value="Hot Fuzz" /&gt;
+            &lt;input type="checkbox" name="newsletter" value="Cold Fusion" /&gt;
+            &lt;input type="checkbox" name="accept" value="Evil Plans" /&gt;
+          </html>
+          <code>Dom.query("input[name!='newsletter']").attr("checked", true);</code>
+          <result>[ &lt;input type="checkbox" name="accept" value="Evil Plans" checked="true" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="attributeStartsWith" return="DomList">
+        <sample>[attribute^=value]</sample>
+        <desc>Selects elements that have the specified attribute with a value beginning exactly with a given string.</desc>
+        <params name="attribute" type="String">
+          <desc>An attribute name.</desc>
+        </params>
+        <params name="value" type="String" optional="true">
+          <desc>An attribute value. Can be either an unquoted single word or a quoted string.</desc>
+        </params>
+        <example>
+          <desc>Finds all inputs with an attribute name that starts with 'news'.</desc>
+          <html>
+            &lt;input name="newsletter" /&gt;
+            &lt;input name="milkman" /&gt;
+            &lt;input name="newsboy" /&gt;
+          </html>
+          <code>Dom.query("input[name^='news']")</code>
+          <result>[ &lt;input name="newsletter" /&gt;, &lt;input name="newsboy" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="attributeEndsWith" return="DomList">
+        <sample>[attribute$=value]</sample>
+        <desc>Selects elements that have the specified attribute with a value ending exactly with a given string. The comparison is case sensitive.</desc>
+        <params name="attribute" type="String">
+          <desc>An attribute name.</desc>
+        </params>
+        <params name="value" type="String" optional="true">
+          <desc>An attribute value. Can be either an unquoted single word or a quoted string. </desc>
+        </params>
+        <example>
+          <desc>Finds all inputs with an attribute name that ends with 'letter'.</desc>
+          <html>
+            &lt;input name="newsletter" /&gt;
+            &lt;input name="milkman" /&gt;
+            &lt;input name="jobletter" /&gt;
+          </html>
+          <code>Dom.query("input[name$='letter']")</code>
+          <result>[ &lt;input name="newsletter" /&gt;, &lt;input name="jobletter" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="attributeContains" return="DomList">
+        <sample>[attribute*=value]</sample>
+        <desc>Selects elements that have the specified attribute with a value containing the a given substring.</desc>
+        <params name="attribute" type="String">
+          <desc>An attribute name.</desc>
+        </params>
+        <params name="value" type="String" optional="true">
+          <desc>An attribute value. Can be either an unquoted single word or a quoted string. </desc>
+        </params>
+        <example>
+          <desc>Finds all inputs with a name attribute that contains 'man'</desc>
+          <html>
+            &lt;input name="man-news" /&gt;
+            &lt;input name="milkman" /&gt;
+            &lt;input name="letterman2" /&gt;
+            &lt;input name="newmilk" /&gt;
+          </html>
+          <code>Dom.query("input[name*='man']")</code>
+          <result>[ &lt;input name="man-news" /&gt;, &lt;input name="milkman" /&gt;, &lt;input name="letterman2" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="attributeMultiple" return="DomList">
+        <sample>[selector1][selector2][selectorN]</sample>
+        <desc>Matches elements that match all of the specified attribute filters.. </desc>
+        <params name="selector1" type="Selector">
+          <desc>An attribute filter.</desc>
+        </params>
+        <params name="selector2" type="Selector">
+          <desc>Another attribute filter, reducing the selection even more</desc>
+        </params>
+        <params name="selectorN" type="Selector">
+          <desc>As many more attribute filters as necessary</desc>
+        </params>
+        <example>
+          <desc>Finds all inputs that have an id attribute and whose name attribute ends with man and sets the value.</desc>
+          <html>
+            &lt;input id="man-news" name="man-news" /&gt;
+            &lt;input name="milkman" /&gt;
+            &lt;input id="letterman" name="new-letterman" /&gt;
+            &lt;input name="newmilk" /&gt;
+          </html>
+          <code>Dom.query("input[id][name$='man']")</code>
+          <result>[ &lt;input id="letterman" name="new-letterman" /&gt; ]</result>
+        </example>
+      </selector>
+    </subcat>
+    <subcat value="Basic Filter">
+      <selector name="not" return="DomList">
+        <sample>:not</sample>
+        <desc>Selects all elements that do not match the given selector.</desc>
+        <longdesc>From JPlus UI 1.3 later, it can support complex selecotr such as :not(div a), :not(div,a)</longdesc>
+        <params name="selector" type="Selector">
+          <desc>A selector with which to filter by.</desc>
+        </params>
+        <example>
+          <desc>Finds all inputs without checked</desc>
+          <html>
+            &lt;input name="apple" /&gt;
+            &lt;input name="flower" checked="checked" /&gt;
+          </html>
+          <code>Dom.query("input:not(:checked)")</code>
+          <result>[ &lt;input name="apple" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="even" return="DomList">
+        <sample>:even</sample>
+        <desc>Selects even elements, zero-indexed.</desc>
+        <example>
+          <desc>Finds even table rows, matching the first, third and so on (index 0, 2, 4 etc.).</desc>
+          <html>
+            &lt;table&gt;
+            &lt;tr&gt;&lt;td&gt;Header 1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;
+          </html>
+          <code>Dom.query("tr:even")</code>
+          <result>[ &lt;tr&gt;&lt;td&gt;Header 1&lt;/td&gt;&lt;/tr&gt;, &lt;tr&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="odd" return="DomList">
+        <sample>:odd</sample>
+        <desc>Selects odd elements, zero-indexed.</desc>
+        <example>
+          <desc>Finds odd table rows, matching the second, fourth and so on (index 1, 3, 5 etc.).</desc>
+          <html>
+            &lt;table&gt;
+            &lt;tr&gt;&lt;td&gt;Header 1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;
+          </html>
+          <code>Dom.query("tr:odd")</code>
+          <result>[ &lt;tr&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;/tr&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="has" return="DomList">
+        <sample>:has</sample>
+        <desc>Selects elements which contain at least one element that matches the specified selector.</desc>
+        <params name="selector" type="Selector">
+          <desc>Any selector.</desc>
+        </params>
+        <example>
+          <desc>Adds the class "test" to all divs that have a p element inside of them.</desc>
+          <html>
+            &lt;div&gt;&lt;p&gt;Hello&lt;/p&gt;&lt;/div&gt;
+            &lt;div&gt;Hello again!&lt;/div&gt;
+          </html>
+          <code>Dom.query("div:has(p)").addClass("test");</code>
+          <result>[ &lt;div class="test"&gt;&lt;p&gt;Hello&lt;/p&gt;&lt;/div&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="hidden" return="DomList">
+        <sample>:hidden</sample>
+        <desc>Selects all elements that are hidden, also include input type="hidden".</desc>
+        <example>
+          <desc>Finds all hidden tr elements</desc>
+          <html>
+            &lt;table&gt;
+            &lt;tr style="display:none"&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;
+          </html>
+          <code>Dom.query("tr:hidden")</code>
+          <result>[ &lt;tr style="display:none"&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;/tr&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="visible*" return="DomList">
+        <sample>:visible</sample>
+        <desc>Selects all elements that are visible.</desc>
+        <example>
+          <desc>Finds all visible tr elements</desc>
+          <html>
+            &lt;table&gt;
+            &lt;tr style="display:none"&gt;&lt;td&gt;Value 1&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;
+          </html>
+          <code>Dom.query("tr:visible")</code>
+          <result>[ &lt;tr&gt;&lt;td&gt;Value 2&lt;/td&gt;&lt;/tr&gt; ]</result>
+        </example>
+      </selector>
+    </subcat>
+    <subcat value="Child Filter">
+      <selector name="nthChild" return="DomList">
+        <sample>:nth-child</sample>
+        <desc>Selects all elements that are the nth-child of their parent.</desc>
+        <longdesc>':eq(index)' only matchs one element. :nth-child start with index 1, but :eq() start with index 0.</longdesc>
+        <params name="index" type="index/even/odd">
+          <desc>The index of each child to match, starting with 1</desc>
+        </params>
+        <example>
+          <desc>Finds the secound li in each ul</desc>
+          <html>
+            &lt;ul&gt;
+            &lt;li&gt;John&lt;/li&gt;
+            &lt;li&gt;Karl&lt;/li&gt;
+            &lt;li&gt;Brandon&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            &lt;li&gt;Glen&lt;/li&gt;
+            &lt;li&gt;Tane&lt;/li&gt;
+            &lt;li&gt;Ralph&lt;/li&gt;
+            &lt;/ul&gt;
+          </html>
+          <code>Dom.query("ul li:nth-child(2)")</code>
+          <result>[ &lt;li&gt;Karl&lt;/li&gt;,   &lt;li&gt;Tane&lt;/li&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="firstChild" return="DomList">
+        <sample>:first-child</sample>
+        <desc>Selects all elements that are the first child of their parent.</desc>
+        <longdesc>':first' matches only a single element, the :first-child selector can match more than one</longdesc>
+        <example>
+          <desc>Finds the first li in each matched ul</desc>
+          <html>
+            &lt;ul&gt;
+            &lt;li&gt;John&lt;/li&gt;
+            &lt;li&gt;Karl&lt;/li&gt;
+            &lt;li&gt;Brandon&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            &lt;li&gt;Glen&lt;/li&gt;
+            &lt;li&gt;Tane&lt;/li&gt;
+            &lt;li&gt;Ralph&lt;/li&gt;
+            &lt;/ul&gt;
+          </html>
+          <code>Dom.query("ul li:first-child")</code>
+          <result>[ &lt;li&gt;John&lt;/li&gt;, &lt;li&gt;Glen&lt;/li&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="lastChild" return="DomList">
+        <sample>:last-child</sample>
+        <desc>Selects all elements that are the last child of their parent.</desc>
+        <longdesc>:last matches only a single element, :last-child can match more than one: one for each parent.</longdesc>
+        <example>
+          <desc>Finds the last li in each matched ul </desc>
+          <html>
+            &lt;ul&gt;
+            &lt;li&gt;John&lt;/li&gt;
+            &lt;li&gt;Karl&lt;/li&gt;
+            &lt;li&gt;Brandon&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            &lt;li&gt;Glen&lt;/li&gt;
+            &lt;li&gt;Tane&lt;/li&gt;
+            &lt;li&gt;Ralph&lt;/li&gt;
+            &lt;/ul&gt;
+          </html>
+          <code>Dom.query("ul li:last-child")</code>
+          <result>[ &lt;li&gt;Brandon&lt;/li&gt;, &lt;li&gt;Ralph&lt;/li&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="onlyChild" return="DomList">
+        <sample>:only-child</sample>
+        <desc>Selects all elements that are the only child of their parent.</desc>
+        <longdesc>If the parent has other child elements, nothing is matched. </longdesc>
+        <example>
+          <desc>Finds the li in which is the only child of ul</desc>
+          <html>
+            &lt;ul&gt;
+            &lt;li&gt;John&lt;/li&gt;
+            &lt;li&gt;Karl&lt;/li&gt;
+            &lt;li&gt;Brandon&lt;/li&gt;
+            &lt;/ul&gt;
+            &lt;ul&gt;
+            &lt;li&gt;Glen&lt;/li&gt;
+            &lt;/ul&gt;
+          </html>
+          <code>Dom.query("ul li:only-child")</code>
+          <result>[ &lt;li&gt;Glen&lt;/li&gt; ]</result>
+        </example>
+      </selector>
+    </subcat>
+    <subcat value="Form">
+      <selector name="input" return="DomList">
+        <sample>:input</sample>
+        <desc>Selects all input, textarea, select and button elements.</desc>
+        <example>
+          <desc>Finds all input elements. </desc>
+          <html>
+            &lt;form&gt;
+            &lt;input type=&quot;button&quot; value=&quot;Input Button&quot;/&gt;
+            &lt;input type=&quot;checkbox&quot; /&gt;
+
+            &lt;input type=&quot;file&quot; /&gt;
+            &lt;input type=&quot;hidden&quot; /&gt;
+            &lt;input type=&quot;image&quot; /&gt;
+
+            &lt;input type=&quot;password&quot; /&gt;
+            &lt;input type=&quot;radio&quot; /&gt;
+            &lt;input type=&quot;reset&quot; /&gt;
+
+            &lt;input type=&quot;submit&quot; /&gt;
+            &lt;input type=&quot;text&quot; /&gt;
+            &lt;select&gt;&lt;option&gt;Option&lt;/option&gt;&lt;/select&gt;
+
+            &lt;textarea&gt;&lt;/textarea&gt;
+            &lt;button&gt;Button&lt;/button&gt;
+
+            &lt;/form&gt;
+          </html>
+          <code>Dom.query(":input")</code>
+          <result>
+            [
+            &lt;input type=&quot;button&quot; value=&quot;Input Button&quot;/&gt;,
+            &lt;input type=&quot;checkbox&quot; /&gt;,
+
+            &lt;input type=&quot;file&quot; /&gt;,
+            &lt;input type=&quot;hidden&quot; /&gt;,
+            &lt;input type=&quot;image&quot; /&gt;,
+
+            &lt;input type=&quot;password&quot; /&gt;,
+            &lt;input type=&quot;radio&quot; /&gt;,
+            &lt;input type=&quot;reset&quot; /&gt;,
+
+            &lt;input type=&quot;submit&quot; /&gt;,
+            &lt;input type=&quot;text&quot; /&gt;,
+            &lt;select&gt;&lt;option&gt;Option&lt;/option&gt;&lt;/select&gt;,
+
+            &lt;textarea&gt;&lt;/textarea&gt;,
+            &lt;button&gt;Button&lt;/button&gt;,
+            ]
+          </result>
+        </example>
+      </selector>
+      <selector name="enabled*" return="DomList">
+        <sample>:enabled</sample>
+        <desc>Selects all elements that are enabled.</desc>
+        <example>
+          <desc>Selects all inputs that are enabled.</desc>
+          <html>
+            &lt;form&gt;
+            &lt;input name="email" disabled="disabled" /&gt;
+            &lt;input name="id" /&gt;
+            &lt;/form&gt;
+          </html>
+          <code>Dom.query("input:enabled")</code>
+          <result>[ &lt;input name="id" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="disabled" return="DomList">
+        <sample>:disabled</sample>
+        <desc>Selects all elements that are disabled.</desc>
+        <example>
+          <desc>Selects all inputs that are disabled.</desc>
+          <html>
+            &lt;form&gt;
+            &lt;input name="email" disabled="disabled" /&gt;
+            &lt;input name="id" /&gt;
+            &lt;/form&gt;
+          </html>
+          <code>Dom.query("input:disabled")</code>
+          <result>[ &lt;input name="email" disabled="disabled" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="checked" return="DomList">
+        <sample>:checked</sample>
+        <desc>Matches all elements that are checked.</desc>
+        <example>
+          <desc>:checked selector works for checkboxes and radio buttons.</desc>
+          <html>
+            &lt;form&gt;
+            &lt;input type="checkbox" name="newsletter" checked="checked" value="Daily" /&gt;
+            &lt;input type="checkbox" name="newsletter" value="Weekly" /&gt;
+            &lt;input type="checkbox" name="newsletter" checked="checked" value="Monthly" /&gt;
+            &lt;/form&gt;
+          </html>
+          <code>Dom.query("input:checked")</code>
+          <result>[ &lt;input type="checkbox" name="newsletter" checked="checked" value="Daily" /&gt;, &lt;input type="checkbox" name="newsletter" checked="checked" value="Monthly" /&gt; ]</result>
+        </example>
+      </selector>
+      <selector name="selected" return="DomList">
+        <sample>:selected</sample>
+        <desc>Selects all elements that are selected.</desc>
+        <example>
+          <desc>Finds the selected option of select element</desc>
+          <html>
+            &lt;select&gt;
+            &lt;option value="1"&gt;Flowers&lt;/option&gt;
+            &lt;option value="2" selected="selected"&gt;Gardens&lt;/option&gt;
+            &lt;option value="3"&gt;Trees&lt;/option&gt;
+            &lt;/select&gt;
+          </html>
+          <code>Dom.query("select option:selected")</code>
+          <result>[ &lt;option value="2" selected="selected"&gt;Gardens&lt;/option&gt; ]</result>
+        </example>
+      </selector>
+    </subcat>
+  </cat>
+  <cat value="Attribute">
+    <subcat value="Attribute">
+      <function name="getAttr" return="String">
+        <desc>Get the value of an attribute for the first element in the set of matched elements.  </desc>
+        <longdesc>If the element doesn't has such attribute, returns null .</longdesc>
+        <params name="name" type="String">
+          <desc>The name of the attribute to get.</desc>
+        </params>
+        <params name="type" type="Integer" optional="true">
+          <desc>The type of attribute. if type = 0 , The method returns the value of JavaScript（getAttr("checked", 0) = true）. If the type = 1 , it returns the value of HTML（getAttr("checked", 1) = "checked"）.if type = 2 , returns the value of default（getAttr("checked", 2) = true, No matter the element is checked or not, the value always the same.）. Default to be 0 . </desc>
+        </params>
+        <example>
+          <desc>Find the src attribute of the first img in the page. </desc>
+          <html>&lt;img id="img" src="test.jpg"/&gt;</html>
+          <code>Dom.get("img").getAttr("src");</code>
+          <result>test.jpg</result>
+        </example>
+      </function>
+      <function name="setAttr" return="Dom">
+        <desc>Set one or more attributes for the set of matched elements. </desc>
+        <params name="key" type="String">
+          <desc>The name of the attribute to set.</desc>
+        </params>
+        <params name="value" type="Object">
+          <desc>A value to set for the attribute.</desc>
+        </params>
+        <example>
+          <desc>Set src for all &lt;img&gt;s in the page. </desc>
+          <html>&lt;img/&gt;
+&lt;img/&gt;</html>
+          <code>Dom.query("img").setAttr("src","test.jpg");</code>
+          <result>[ &lt;img src= "test.jpg" /&gt; , &lt;img src= "test.jpg" /&gt; ]</result>
+        </example>
+      </function>
+      <function name="setAttr" return="Dom">
+        <desc>Delete a attribute for the set of matched elements. </desc>
+        <params name="name" type="String">
+          <desc>The name of the attribute to delete</desc>
+        </params>
+        <params name="null" type="Null">
+          <desc>null</desc>
+        </params>
+        <example>
+          <desc>Delete src for all &lt;img&gt;s in the page.</desc>
+          <html>&lt;img src="test.jpg"/&gt;</html>
+          <code>Dom.query("img").setAttr("src");</code>
+          <result>[ &lt;img /&gt; ]</result>
+        </example>
+      </function>
+      <function name="set" return="Dom">
+        <desc>Set styles, attributes, or events to the set of matched element. </desc>
+        <params name="name" type="value">
+          <desc>The name of a css attribute, a html attribute or an event.  </desc>
+        </params>
+        <params name="value" type="String, Number">
+          <desc>The value of a css attribute, a html attribute or an event. </desc>
+        </params>
+        <example>
+          <desc>Set he color of all paragraphs to red, and class to "cls-red", and add a click event.</desc>
+          <code>Dom.query("p").set("color","red").set("class","cls-red").set("onclick", function(){alert('clicked')});</code>
+        </example>
+      </function>
+      <function name="set" return="Dom">
+        <desc>Set styles, attributes, or events to the set of matched element at the same time. </desc>
+        <longdesc>此method相当于调用 setStyle 或 setAttr . 数字将自动转化为像素值. </longdesc>
+        <params name="obj" type="Object">
+          <desc>The json object contains names and values </desc>
+        </params>
+        <example>
+          <desc>Set he color of all paragraphs to red, and class to "cls-red", and add a click event. </desc>
+          <code>Dom.query("p").set({
+  "color":"red",
+  "class":"cls-red",
+  "onclick": function(){alert('clicked')}
+});</code>
+        </example>
+      </function>
+
+    </subcat>
+    <subcat value="CSS">
+      <function name="addClass" return="Dom">
+        <desc>Adds the specified class(es) to each of the set of matched elements.</desc>
+        <params name="class" type="String">
+          <desc>One or more class names, separated by spaces.</desc>
+        </params>
+        <example>
+          <desc>Adds the class "selected" to the matched elements.</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;</html>
+          <code>Dom.query("p").addClass("selected");</code>
+          <result>[ &lt;p class="selected"&gt;Hello&lt;/p&gt; ]</result>
+        </example>
+        <example>
+          <desc>Adds the class "selected" and "highlight" to the matched elements.</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;</html>
+          <code>Dom.query("p").addClass("selected highlight");</code>
+          <result>[ &lt;p class="selected highlight"&gt;Hello&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="removeClass" return="Dom">
+        <desc>Remove a single class, multiple classes, or all classes from each element in the set of matched elements. </desc>
+        <params name="class" type="String">
+          <desc>One or more class names, separated by spaces.</desc>
+        </params>
+        <example>
+          <desc>Remove the class 'selected' from the matched elements.</desc>
+          <html>&lt;p class="selected first"&gt;Hello&lt;/p&gt;</html>
+          <code>Dom.query("p").removeClass("selected");</code>
+          <result>[ &lt;p class="first"&gt;Hello&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="removeClass" return="Dom">
+        <desc>Remove all classes from each element in the set of matched elements. </desc>
+        <example>
+          <desc>Remove all classes from p</desc>
+          <html>&lt;p class="selected first"&gt;Hello&lt;/p&gt;</html>
+          <code>Dom.query("p").removeClass();</code>
+          <result>[ &lt;p&gt;Hello&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="toggleClass" return="Dom">
+        <desc>Add or remove one or more classes from each element in the set of matched elements, depending on either the class's presence or the value of the switch argument. </desc>
+        <params name="class" type="String">
+          <desc>class name</desc>
+        </params>
+        <example>
+          <desc>Toggle the class 'selected' of p </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p class="selected"&gt;Hello Again&lt;/p&gt;</html>
+          <code>Dom.query("p").toggleClass("selected");</code>
+          <result>[ &lt;p class="selected"&gt;Hello&lt;/p&gt;, &lt;p&gt;Hello Again&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="hasClass" return="Boolean">
+        <desc>Determine whether any of the matched elements are assigned the given class. returns true or false. </desc>
+        <params name="className" type="String">
+          <desc>The class name to search for.</desc>
+        </params>
+        <example>
+          <desc>Looks for the element that contains 'protected' as a class. </desc>
+          <html>&lt;div class="protected"&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;</html>
+          <code>Dom.query("div").on('click', function(){
+            if ( Dom.query(this).hasClass("protected") )
+            Dom.query(this)
+            .animate({ left: -10 })
+            .animate({ left: 10 })
+            .animate({ left: -10 })
+            .animate({ left: 10 })
+            .animate({ left: 0 });
+            });</code>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="HTML">
+      <function name="getHtml" return="String">
+        <desc>Get the HTML contents of the first element in the set of matched elements. </desc>
+        <example>
+          <desc>Get the HTML contents of the div with id "a" </desc>
+          <html>&lt;div id="a"&gt;&lt;p/&gt;&lt;/div&gt;</html>
+          <code>$Dom.query("#a").getHtml();</code>
+          <result>"&lt;p/&gt;"</result>
+        </example>
+      </function>
+      <function name="setHtml" return="Dom">
+        <desc>Set the HTML contents of each element in the set of matched elements. </desc>
+        <params name="value" type="String">
+          <desc>A string of HTML to set as the content of each matched element.</desc>
+        </params>
+        <example>
+          <desc>Add some html to the div with id "a" </desc>
+          <html>&lt;div id="a"&gt;&lt;p/&gt;&lt;/div&gt;</html>
+          <code>Dom.get("a").setHtml("&lt;a/&gt;");</code>
+          <result>&lt;div id="a"&gt;&lt;a/&gt;&lt;/div&gt;</result>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Text/Value">
+      <function name="getText" return="String">
+        <desc>Get the current value of the first element in the set of matched elements. </desc>
+        <example>
+          <desc>Get the value of specified input</desc>
+          <html>&lt;input type="text" value="some text"/&gt;</html>
+          <code>Dom.query("input").getText();</code>
+          <result>["some text"]</result>
+        </example>
+      </function>
+      <function name="setText" return="Dom">
+        <desc>Set the value of each element in the set of matched elements. </desc>
+        <params name="value" type="String">
+          <desc>Set the value of an input box.</desc>
+        </params>
+        <example>
+          <desc>设定文本框的值</desc>
+          <html>&lt;input type="text"/&gt;</html>
+          <code>Dom.query("input").setText("hello world!");</code>
+        </example>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="Traversal">
+    <subcat value="Descendants traversal">
+      <function name="find" return="Dom">
+        <desc> Get the first descendant of each element in the current set of matched elements. </desc>
+        <params name="expr" type="String">
+          <desc>A string containing a selector expression to match elements against.</desc>
+        </params>
+        <example>
+          <desc>Starts with all paragraphs and searches for the first descendant span element. </desc>
+          <html>&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;, how are you?&lt;/p&gt;</html>
+          <code>Dom.query("p").find("span")</code>
+          <result>[ &lt;span&gt;Hello&lt;/span&gt; ]</result>
+        </example>
+      </function>
+      <function name="query" return="DomList">
+        <desc>Get all the descendants of each element in the current set of matched elements, filtered by a selector, jQuery object, or element.</desc>
+        <params name="expr" type="String">
+          <desc>A string containing a selector expression to match elements against.</desc>
+        </params>
+        <example>
+          <desc>Starts with all paragraphs and searches for the descendant span elemens.  </desc>
+          <html>&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;, how are you?&lt;/p&gt;</html>
+          <code>Dom.query("p").query("span")</code>
+          <result>[ &lt;span&gt;Hello&lt;/span&gt; ]</result>
+        </example>
+      </function>
+      <function name="first" return="Dom">
+        <desc>Get the first descendant element of the matched element.This method will ignore the text node.</desc>
+        <longdesc>This method only work on the first element of the set of matched element. If you want to get the first child of all matched element, use each method.</longdesc>
+         <params name="filter" type="String/Function/null" optional="true">
+           <desc>String:CSS seletor expression to filter the selected element/
+              Function:Function to filter the selected element/
+              Null:Returns the text node as well.</desc>
+          </params>
+        <example>
+          <desc>Get the first element in a paragraph.</desc>
+          <html>&lt;p&gt; This is just a test.&lt;/p&gt; &lt;p&gt; So is this&lt;/p&gt;</html>
+          <code>Dom.query("p").first()</code>
+          <result>[ &lt;p&gt; So is this&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="last" return="Dom">
+        <desc>Get the last descendant element of the matched element.This method will ignore the text node.</desc>
+        <longdesc>This method only work on the first element of the set of matched element. If you want to get the last child of all matched element, use each method.</longdesc>
+        <params name="filter" type="String/Function/null" optional="true">
+           <desc>String:CSS seletor expression to filter the selected element/
+              Function:Function to filter the selected element/
+              Null:Returns the text node as well.</desc>
+          </params>
+        <example>
+          <desc>Get the last element in a paragraph.</desc>
+          <html>&lt;p&gt; This is just a test.&lt;/p&gt; &lt;p&gt; So is this&lt;/p&gt;</html>
+          <code>Dom.query("p").last()</code>
+          <result>[ &lt;p&gt; So is this&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="child" return="Dom">
+        <desc>Get the child of the matched element</desc>
+        <longdesc>This method only work on the first element of the set of matched element. If you want to get the child of all matched element, use each method.</longdesc>
+        <params name="filter" type="Integer/String/Function/null" optional="true">
+           <desc>Integer:The index of selected children/String:CSS seletor expression to filter the selected element/
+              Function:Function to filter the selected element/
+              Null:Returns the text node as well.</desc>
+          </params>
+        <example>
+          <desc>Get the secound matched child.</desc>
+          <html>&lt;p&gt; This is just a test.&lt;/p&gt; &lt;p&gt; So is this&lt;/p&gt;</html>
+          <code>Dom.query("p").child(1)</code>
+          <result>[ &lt;p&gt; So is this&lt;/p&gt; ]</result>
+        </example>
+        <example>
+          <desc>Get the penultimate matched child.</desc>
+          <html>&lt;p&gt; This is just a test.&lt;/p&gt; &lt;p&gt; So is this&lt;/p&gt;</html>
+          <code>Dom.query("p").child(-2)</code>
+          <result>[ &lt;p&gt; So is this&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="children" return="DomList">
+        <desc> Get the children of the matched element, optionally filtered by a selector. </desc>
+        <longdesc>This method only work on the first element of the set of matched element.PS：parents() will search for the all ancestors, but children() only search for the closet children of matched element. </longdesc>
+        <params name="filter" type="String/Function/null" optional="true">
+           <desc>String:CSS seletor expression to filter the selected element/
+              Function:Function to filter the selected element/
+              Null:Returns the text node as well.</desc>
+          </params>
+        <example>
+          <desc> Find all children of div. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;div&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt;&lt;p&gt;And Again&lt;/p&gt;</html>
+          <code>Dom.query("div").children()</code>
+          <result>[ &lt;span&gt;Hello Again&lt;/span&gt; ]</result>
+        </example>
+        <example>
+          <desc>Find all div children of div. </desc>
+          <html>&lt;div&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;p class="selected"&gt;Hello Again&lt;/p&gt;&lt;p&gt;And Again&lt;/p&gt;&lt;/div&gt;</html>
+          <code>Dom.query("div").children("div")</code>
+          <result>[ &lt;p class="selected"&gt;Hello Again&lt;/p&gt; ]</result>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Brother traversal">
+      <function name="next" return="Dom">
+        <desc>Get the immediately following sibling of each element in the set of matched elements. If a selector is provided, it retrieves the next sibling only if it matches that selector.. </desc>
+        <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Find the very next sibling of paragraph. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;Hello Again&lt;/p&gt;&lt;div&gt;&lt;span&gt;And Again&lt;/span&gt;&lt;/div&gt;</html>
+          <code>Dom.query("p").next()</code>
+          <result>[ &lt;p&gt;Hello Again&lt;/p&gt;, &lt;div&gt;&lt;span&gt;And Again&lt;/span&gt;&lt;/div&gt; ]</result>
+        </example>
+      </function>
+      <function name="nextAll" return="DomList">
+        <desc>Get all following siblings of each element in the set of matched elements, optionally filtered by a selector. </desc>
+        <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Locate all the divs after the first and give them a class.</desc>
+          <html>&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;</html>
+          <code>Dom.query("div:first").getAllNext().addClass("after");</code>
+          <result>[ &lt;div class="after"&gt;&lt;/div&gt;, &lt;div class="after"&gt;&lt;/div&gt;, &lt;div class="after"&gt;&lt;/div&gt; ]</result>
+        </example>
+      </function>
+      <function name="prev" return="Dom">
+        <desc>Get the immediately preceding sibling of each element in the set of matched elements, optionally filtered by a selector. </desc>
+        <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc> Find the very previous sibling of each paragraph. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;div&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt;&lt;p&gt;And Again&lt;/p&gt;</html>
+          <code>Dom.query("p").prev()</code>
+          <result>[ &lt;div&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt; ]</result>
+        </example>
+        <example>
+          <desc> For each paragraph, find the very previous div sibling. </desc>
+          <html>&lt;div&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/div&gt;&lt;p class="selected"&gt;Hello Again&lt;/p&gt;&lt;p&gt;And Again&lt;/p&gt;</html>
+          <code>Dom.query("p").prev("div")</code>
+          <result>[ &lt;p class="selected"&gt;Hello Again&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="prevAll" return="DomList">
+        <desc>Get all preceding siblings of each element in the set of matched elements, optionally filtered by a selector.</desc>
+        <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Locate all the divs preceding the last div and give them a class.</desc>
+          <html>&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;</html>
+          <code>Dom.query("div:last").prevAll().addClass("before");</code>
+          <result>[ &lt;div class="before"&gt;&lt;/div&gt;, &lt;div class="before"&gt;&lt;/div&gt;, &lt;div class="before"&gt;&lt;/div&gt; ]</result>
+        </example>
+      </function>
+      <function name="siblings" return="DomList">
+        <desc>Get the siblings of each element in the set of matched elements, optionally filtered by a selector.</desc>
+        <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Finds the all elements of div. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;div&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt;&lt;p&gt;And Again&lt;/p&gt;</html>
+          <code>Dom.query("div").slibings()</code>
+          <result>[ &lt;p&gt;Hello&lt;/p&gt;, &lt;p&gt;And Again&lt;/p&gt; ]</result>
+        </example>
+        <example>
+          <desc>Find all siblings with a class "selected" of each div. </desc>
+          <html>&lt;div&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/div&gt;&lt;p class="selected"&gt;Hello Again&lt;/p&gt;&lt;p&gt;And Again&lt;/p&gt;</html>
+          <code>Dom.query("div").slibings("div")</code>
+          <result>[ &lt;p class="selected"&gt;Hello Again&lt;/p&gt; ]</result>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Parent traversal">
+      <function name="parent" return="Dom">
+        <desc>Get the parent of each element in the current set of matched elements, optionally filtered by a selector. </desc>
+       <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Finds all parents of each span elements. </desc>
+          <html>&lt;html&gt;&lt;body&gt;&lt;div&gt;&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/p&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</html>
+          <code>Dom.query("span").parent()</code>
+          <result>[ &lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/p,&lt;div&gt;&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/p&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt; ]</result>
+        </example>
+      </function>
+      <function name="parentAll" return="DomList">
+        <desc>Get the ancestors of each element in the current set of matched elements, optionally filtered by a selector.</desc>
+        <params name="filter" type="String" optional="true">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Find all parent elements of each span </desc>
+          <html>&lt;html&gt;&lt;body&gt;&lt;div&gt;&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/p&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</html>
+          <code>Dom.query("span").parentAll()</code>
+        </example>
+        <example>
+          <desc>Find all parent that are p elements of each span. </desc>
+          <code>Dom.query("span").parentAll("p")</code>
+        </example>
+      </function>
+	  <function name="closest" return="Dom">
+        <desc>For each element in the set, get the first element that matches the selector by testing the element itself and traversing up through its ancestors in the DOM tree.</desc>
+        <params name="filter" type="String" optional="false">
+          <desc>An element or a string containing a selector expression to match elements against. </desc>
+        </params>
+        <example>
+          <desc>Find the first div ancestor of span </desc>
+          <html>&lt;html&gt;&lt;body&gt;&lt;div&gt;&lt;p&gt;&lt;span&gt;Hello&lt;/span&gt;&lt;/p&gt;&lt;span&gt;Hello Again&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</html>
+          <code>Dom.query("span").closest('div')</code>
+        </example>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="Determine">
+    <subcat value="Node">
+      <function name="match" return="Boolean">
+        <desc>Determine whether any of the matched elements are matched the selector </desc>
+        <params name="expr" type="String">
+          <desc>A string containing a selector expression to match the current set of elements against.</desc>
+        </params>
+        <example>
+          <desc>Determine whether the selected checkboxs are matched input element. </desc>
+          <html>&lt;form&gt;&lt;input type="checkbox" /&gt;&lt;/form&gt;</html>
+          <code>Dom.query("input[type='checkbox']").match("input")</code>
+          <result>true</result>
+        </example>
+      </function>
+      <function name="has" return="Boolean">
+        <desc>Determine whether any of matched elements to those that have a descendant that matches the selector or DOM element.</desc>
+        <params name="expr" type="String">
+          <desc>A string containing a selector expression to match elements against. </desc>
+        </params>
+        <params name="allowSelf" type="Boolean" optional="true">
+          <desc>If true， returns true when contains ifself. </desc>
+        </params>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="DOM">
+    <subcat value="DOM Insertion">
+      <function name="append" return="Dom">
+        <desc> Insert content, specified by the parameter, to the end of each element in the set of matched elements. </desc>
+        <params name="content" type="String, Element, Control">
+          <desc>DOM element, HTML string, or encapsulated DOM object</desc>
+        </params>
+        <example>
+          <desc>Appends some HTML to all paragraphs.</desc>
+          <html>&lt;p&gt;I would like to say: &lt;/p&gt;</html>
+          <code>Dom.query("p").append("&lt;b&gt;Hello&lt;/b&gt;");</code>
+          <result>[ &lt;p&gt;I would like to say: &lt;b&gt;Hello&lt;/b&gt;&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="appendTo" return="Dom">
+        <desc>nsert every element in the set of matched elements to the end of the target. </desc>
+        <params name="target" type="String, Element, Control">
+          <desc>DOM element, HTML string, or encapsulated DOM object</desc>
+        </params>
+        <example>
+          <desc>Appends all spans to the element with the ID "foo".</desc>
+          <html>&lt;p&gt;I would like to say: &lt;/p&gt;&lt;div id="foo"&gt;&lt;/div&gt;</html>
+          <code>Dom.query("p").appendTo();</code>
+        </example>
+      </function>
+      <function name="before" return="Dom">
+        <desc>Insert content, specified by the parameter, before each element in the set of matched elements. </desc>
+        <params name="target" type="String, Element, Control">
+          <desc>DOM element, HTML string, or encapsulated DOM object</desc>
+        </params>
+        <example>
+          <desc>Inserts some HTML before all paragraphs.</desc>
+          <html>&lt;p&gt;I would like to say: &lt;/p&gt;</html>
+          <code>Dom.query("p").before("&lt;b&gt;Hello&lt;/b&gt;");</code>
+          <result>[ &lt;p&gt;I would like to say: &lt;b&gt;Hello&lt;/b&gt;&lt;/p&gt; ]</result>
+        </example>
+      </function>
+      <function name="after" return="Dom">
+        <desc> Insert content, specified by the parameter, after each element in the set of matched elements. </desc>
+        <params name="target" type="String, Element, Control">
+          <desc>DOM element, HTML string, or encapsulated DOM object</desc>
+        </params>
+        <example>
+          <desc>Inserts some HTML before all paragraphs. </desc>
+          <html>&lt;p&gt;I would like to say: &lt;/p&gt;</html>
+          <code>Dom.query("p").after("&lt;b&gt;Hello&lt;/b&gt;");</code>
+          <result>[ &lt;p&gt;I would like to say: &lt;b&gt;Hello&lt;/b&gt;&lt;/p&gt; ]</result>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Replace and Wrap">
+      <function name="replaceWith" return="Dom">
+        <desc>Replace each element in the set of matched elements with the provided new content.</desc>
+        <params name="content" type="String, Element, Control, Function">
+          <desc>The content to insert. May be an HTML string, DOM element, or encapsulated DOM object.Or a function that returns content with which to replace the set of matched elements.</desc>
+        </params>
+        <example>
+          <desc>Replace all paragraphs with bold words. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;cruel&lt;/p&gt;&lt;p&gt;World&lt;/p&gt;</html>
+          <code>Dom.query("p").replaceWith("&lt;b&gt;Paragraph. &lt;/b&gt;");</code>
+          <result>&lt;b&gt;Paragraph. &lt;/b&gt;&lt;b&gt;Paragraph. &lt;/b&gt;&lt;b&gt;Paragraph. &lt;/b&gt;</result>
+        </example>
+      </function>
+      
+    </subcat>
+    <subcat value="Remove">
+      <function name="empty" return="Dom">
+        <desc>Remove all child nodes of the set of matched elements from the DOM. </desc>
+        <example>
+          <desc>Removes all child nodes (including text nodes) from all paragraphs</desc>
+          <html>&lt;p&gt;Hello, &lt;span&gt;Person&lt;/span&gt; &lt;a href="#"&gt;and person&lt;/a&gt;&lt;/p&gt;</html>
+          <code>Dom.query("p").empty();</code>
+          <result>&lt;p&gt;&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="remove" return="Dom">
+        <desc>Remove the set of matched elements from the DOM.</desc>
+        <longdesc>Take the elements out of DOM tree, but keeps all bound events data associated with the removed elements. </longdesc>
+        <params name="child" type="String" optional="true">
+          <desc>A selector expression that filters the set of matched elements to be removed. </desc>
+        </params>
+        <example>
+          <desc>Removes all paragraphs from the DOM</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt; how are &lt;p&gt;you?&lt;/p&gt;</html>
+          <code>Dom.query("p").remove();</code>
+          <result>how are</result>
+        </example>
+        <example>
+          <desc> Removes all paragraphs from the DOM</desc>
+          <html>&lt;p class="hello"&gt;Hello&lt;/p&gt; how are &lt;p&gt;you?&lt;/p&gt;</html>
+          <code>Dom.query("p").remove(".hello");</code>
+          <result>how are &lt;p&gt;you?&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="dispose" return="Dom">
+        <desc>Remove the set of matched elements from the DOM. </desc>
+        <longdesc>This method remove the element itself, as well as everything inside it. In addition to the elements themselves, all bound events and data associated with the elements are removed. </longdesc>
+        <params name="expr" type="String" optional="true">
+          <desc>A selector expression</desc>
+        </params>
+        <example>
+          <desc>Removes all paragraphs from the DOM</desc>
+          <html>&lt;p&gt;dispose&lt;/p&gt; how are &lt;p&gt;you?&lt;/p&gt;</html>
+          <code>Dom.query("p").detach();</code>
+          <result>how are</result>
+        </example>
+        <example>
+          <desc>Removes all paragraphs with class "hello" from the DOM</desc>
+          <html>&lt;p class="hello"&gt;Hello&lt;/p&gt; how are &lt;p&gt;you?&lt;/p&gt;</html>
+          <code>Dom.query("p").dispose(".hello");</code>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Clone">
+      <function name="clone" return="Dom">
+        <desc>Create a deep copy of the set of matched elements. </desc>
+        <example>
+          <desc>Clones all b elements (and selects the clones) and prepends them to all paragraphs. </desc>
+          <html>&lt;b&gt;Hello&lt;/b&gt;&lt;p&gt;, how are you?&lt;/p&gt;</html>
+          <code>Dom.query("b").clone().prependTo("p");</code>
+          <result>&lt;b&gt;Hello&lt;/b&gt;&lt;p&gt;&lt;b&gt;Hello&lt;/b&gt;, how are you?&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="clone" return="Dom">
+        <desc>Create a deep copy of the set of matched elements with data and evnevts</desc>
+        <params name="true" type="Boolean">
+          <desc>A Boolean indicating whether event handlers should be copied along with the elements.</desc>
+        </params>
+        <example>
+          <desc>Create a button, which can clone itself and its copy has the same function. </desc>
+          <html>&lt;button&gt;Clone Me!&lt;/button&gt;</html>
+          <code>
+            Dom.query("button").click(function(){
+            Dom.query(this).clone(true).insertAfter(this);
+            });
+          </code>
+        </example>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="CSS">
+    <subcat value="CSS">
+      <function name="getStyle" return="String">
+        <desc>Get the value of a style property for the first element in the set of matched elements. </desc>
+        <params name="name" type="String">
+          <desc>A CSS property.</desc>
+        </params>
+        <example>
+          <desc>Get the value of color in the first paragraph.</desc>
+          <code>Dom.query("p").getStyle("color");</code>
+        </example>
+      </function>
+      <function name="setStyle" return="Dom">
+        <desc>Set one or more CSS properties for the set of matched elements.</desc>
+        <params name="key" type="String">
+          <desc>A CSS property name.</desc>
+        </params>
+        <params name="value" type="Object">
+          <desc>A value to set for the property.</desc>
+        </params>
+        <example>
+          <desc>To set the color of all paragraphs to red and background to blue:. </desc>
+          <code>Dom.query("p").setStyle('color', "#ff0011");</code>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Position">
+      <function name="getPosition" return="Point{x,y}">
+        <desc>Get the current coordinates of the first element in the set of matched elements, relative to the document. </desc>
+        <longdesc>Returns an object containing the properties x and y.</longdesc>
+        <example>
+          <desc>Get the position of the secound paragraph.</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>
+            var p = Dom.query("p:last");
+            var position = p.getPosition();
+            p.html( "left: " + position.x + ", top: " + position.y );
+          </code>
+          <result>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;left: 0, top: 35&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="setPosition" return="Dom">
+        <desc>Set the current coordinates of the set of matched elements, relative to the document. </desc>
+        <longdesc>If the position attribute of the target if static, it will be changed to relative. </longdesc>
+        <params name="coordinates" type="Object{top,left}, function(index, coords) ">
+          <desc>An object that must constaining the new properties x and y. </desc>
+        </params>
+        <example>
+          <desc>Set the position of the secound paragraph</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>Dom.query("p:last").setPosition({ x: 10, y: 30 });</code>
+        </example>
+      </function>
+      <function name="getOffset" return="Point{x,y}">
+        <desc>Get the current coordinates of the first element in the set of matched elements, relative to the offset parent. </desc>
+        <longdesc>Returns an object containing the properties x and y. </longdesc>
+        <example>
+          <desc>Get the offset of the first paragraph.</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>
+            var p = Dom.query("p:first");
+            var offset = p.getOffset();
+            Dom.query("p:last").html( "left: " + offset.x + ", top: " + offset.y );
+          </code>
+          <result>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;left: 15, top: 15&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="setOffset" return="Dom">
+        <desc>Get the current coordinates of the set of matched elements, relative to the offset parent. </desc>
+        <longdesc>If the position attribute of the target if static, it will be changed to relative. </longdesc>
+        <params name="coordinates" type="Object{top,left}, function(index, coords) ">
+          <desc>An object that must constaining the new properties x and y. </desc>
+        </params>
+        <example>
+          <desc>Set the offset of the first paragraph.</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>
+            Dom.query("p:first").setOffset({ x: 10, y: 30 });
+          </code>
+          <result>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;left: 15, top: 15&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="getScroll" return="Point{x,y}">
+        <desc>Get the current vertical position of the scroll bar for the first element in the set of matched elements. </desc>
+        <example>
+          <desc>Get the scrollTop of the first paragraph.</desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>
+            var p = Dom.query("p:first");
+            Dom.query("p:last").text( "scrollTop:" + p.getScroll() );
+          </code>
+          <result>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;scrollTop: 0&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="setScroll" return="Dom">
+        <desc>Set the current vertical position of the scroll bar for each of the set of matched elements.</desc>
+        <params name="val" type="String, Number">
+          <desc>An integer indicating the new position to set the scroll bar to.</desc>
+        </params>
+        <example>
+          <desc>Set the scrollTop of a div with class demo.</desc>
+          <code>Dom.query("div.demo").setScroll(300);</code>
+        </example>
+      </function>
+
+    </subcat>
+    <subcat value="Size">
+      <function name="getHeight" return="Integer">
+        <desc>Get the current computed height for the first element in the set of matched elements. </desc>
+        <longdesc>Also can get the height of  window and document since the jPlus 1.2</longdesc>
+        <example>
+          <desc>Get the height of the first paragraph.</desc>
+          <code>Dom.query("p").getHeight();</code>
+        </example>
+        <example>
+          <desc>Get the height of the current window.</desc>
+          <code>Dom.query(window).getHeight();</code>
+        </example>
+        <example>
+          <desc>Get the height of the current document.</desc>
+          <code>Dom.query(document).getHeight();</code>
+        </example>
+      </function>
+      <function name="setHeight" return="Dom">
+        <desc>Set the CSS height of every matched element. </desc>
+        <params name="val" type="String, Number, Function">
+          <desc>An integer representing the number of pixels, or an integer with an optional unit of measure appended (as a string).Also support a function to return the height to set.</desc>
+        </params>
+        <example>
+          <desc>Set the height of all paragraphs to 20px</desc>
+          <code>Dom.query("p").setHeight(20);</code>
+        </example>
+      </function>
+      <function name="getWidth" return="Integer">
+        <desc>Get the current computed width for the first element in the set of matched elements. </desc>
+        <longdesc>Also can get the width of  window and document since the jPlus 1.2</longdesc>
+        <example>
+          <desc>Get the width of the first paragraph.</desc>
+          <code>Dom.query("p").getWidth();</code>
+        </example>
+        <example>
+          <desc>Get the width of the current window.</desc>
+          <code>Dom.query(window).getWidth();</code>
+        </example>
+        <example>
+          <desc>Get the width of the current document.</desc>
+          <code>Dom.query(document).getWidth();</code>
+        </example>
+      </function>
+      <function name="setWidth" return="Dom">
+        <desc> Set the CSS width of each element in the set of matched elements. </desc>
+        <params name="val" type="String, Number, Function">
+          <desc>An integer representing the number of pixels, or an integer with an optional unit of measure appended (as a string).Also support a function to return the height to set. </desc>
+        </params>
+        <example>
+          <desc>Set the width of all paragraphs to 20px</desc>
+          <code>Dom.query("p").setWidth(20);</code>
+        </example>
+      </function>
+      <function name="getSize" return="Point{x,y}">
+        <desc>Get the exactly size of the matched element, including the padding and margin, but exclude the size out of the scroll area.</desc>
+        <longdesc>Also avaliable to hidden elements.</longdesc>
+        <example>
+          <desc>Get the exactly size of the first paragraph. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>Dom.query("p:first").getSize();</code>
+          <result>{x=200,y=100}</result>
+        </example>
+      </function>
+      <function name="setSize" return="Dom">
+        <desc>Set the exactly size of the matched element, including the padding and margin. </desc>
+        <longdesc>Also avaliable to hidden elements. </longdesc>
+        <params name="coordinates" type="Object{width,height}, function(index, coords) ">
+          <desc>An object containing properties x and y. </desc>
+        </params>
+        <example>
+          <desc>Set the size of the first paragraph. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>Dom.query("p:first").setSize({x:200,y:100});</code>
+        </example>
+      </function>
+      <function name="getScrollSize" return="Point{x,y}">
+        <desc>Get the size out of the scroll area of the first element in the set of the matched element</desc>
+        <longdesc>>Also avaliable to hidden elements. </longdesc>
+        <example>
+          <desc>Get the outter size of the the first paragraph </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p&gt;2nd Paragraph&lt;/p&gt;</html>
+          <code>Dom.query("p:first"). getScrollSize();</code>
+          <result>{x=220,y=120}</result>
+        </example>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="Events">
+    <subcat value="Event Handler Attachment">
+      <function name="on" return="Dom">
+        <desc> Attach a handler to an event for the elements. </desc>
+        <longdesc>If you want to prevent the default event and bubbling, the hander must return false. </longdesc>
+        <params name="type" type="String">
+          <desc>A string containing an event type, such as "click" or "submit," or custom event names.</desc>
+        </params>
+        <params name="fn" type="Function">
+          <desc>A function to execute each time the event is triggered.</desc>
+        </params>
+        <example>
+          <desc>Alert the text in the paragraphs when they are clicked. </desc>
+          <code>
+            Dom.query("p").on("click", function(){
+            alert( Dom.query(this).getText() );
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Prevent the default handler and bubbling of the submit event. </desc>
+          <code>Dom.query("form").on("submit", function() { return false; })</code>
+        </example>
+        <example>
+          <desc>Just prevent the default handler. </desc>
+          <code>
+            Dom.query("form").on("submit", function(event){
+            event.preventDefault();
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Just prevent the bubbling of the event. </desc>
+          <code>
+            Dom.query("form").bind("submit", function(event){
+            event.stopPropagation();
+            });
+          </code>
+        </example>
+      </function>
+      <function name="one" return="Dom">
+        <desc>Attach a handler to an event for the elements. The handler is executed at most once per element.</desc>
+        <params name="type" type="String">
+          <desc>A string containing an event type, such as "click" or "submit," or custom event names.</desc>
+        </params>
+        <params name="fn" type="Function">
+          <desc>A function to execute at the time the event is triggered.</desc>
+        </params>
+        <example>
+          <desc>Tie a one-time click to each paragraph.</desc>
+          <code>
+            Dom.query("p").one("click", function(){
+            alert( Dom.query(this).getText() );
+            });
+          </code>
+        </example>
+      </function>
+      <function name="un" return="Dom">
+        <desc>Remove a previously-attached event handler from the elements.</desc>
+        <params name="type" type="String">
+          <desc>A string containing an event type, such as "click" or "submit," or custom event names.</desc>
+        </params>
+        <params name="fn" type="Function">
+          <desc>The function that is to be no longer executed.</desc>
+        </params>
+        <example>
+          <desc>Cancel all the events that add to paragraph before.</desc>
+          <code>Dom.query("p").un()</code>
+        </example>
+        <example>
+          <desc>Cancel the click event that add to paragraph before.</desc>
+          <code>Dom.query("p").un( "click" )</code>
+        </example>
+      </function>
+      <function name="trigger" return="Dom">
+        <desc> Execute a handler attached to the matched elements for the given event type. </desc>
+        <params name="type" type="String">
+          <desc>Event type</desc>
+        </params>
+        <params name="e" type="Object">
+          <desc>An event obfect</desc>
+        </params>
+        <example>
+          <desc>Trigger a click for paragraph</desc>
+          <code>Dom.query("p").trigger( "click" )</code>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Event Delegate">
+      <function name="delegate" return="Dom">
+        <desc>Attach a handler to a event for all elements that match the selector, now or in the future, based on a specific set of root elements.</desc>
+        <longdesc>This method is similiar with the live() in jQuery, the difference between of delegate and live is that the event which is attached to the root element but not the current selector, that means document.A.live('click') is equal with document.delegate(A,'click')</longdesc>
+        <params name="Selector" type="String">
+          <desc>A selector to filter the elements that trigger the event.</desc>
+        </params>
+        <params name="type" type="String">
+          <desc>A string containing one JavaScript event types</desc>
+        </params>
+        <params name="fn" type="Function">
+          <desc>A function to execute at the time the event is triggered.</desc>
+        </params>
+        <example>
+          <desc>Click a paragraph to add another. Note that .delegate() attaches a click event handler to all paragraphs - even new ones.</desc>
+          <html>&lt;p&gt;Click me!&lt;/p&gt;</html>
+          <code>
+            Dom.query("body").delegate("p",click", function(){
+            Dom.query(this).after("&lt;p&gt;Another paragraph!&lt;/p&gt;");
+            });
+          </code>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Event">
+      <selector name="blur" return="Dom">
+        <sample>blur</sample>
+        <desc>Bind an event handler to the "blur" JavaScript event, or trigger that event on an element.</desc>
+        <example>
+          <desc>Alert "Hello World!" when paragraphs lost their focus.</desc>
+          <code>Dom.query("p").on('blur', function () { alert("Hello World!"); } );</code>
+        </example>
+        <example>
+          <desc>Trigger the blur event of all paragraph. </desc>
+          <code>Dom.query("p").blur()</code>
+        </example>
+      </selector>
+      <selector name="change" return="Dom">
+        <sample>change</sample>
+        <desc>Bind an event handler to the "change" JavaScript event, or trigger that event on an element.</desc>
+        <example>
+          <desc>Add validation to the text field when the change event triggered.</desc>
+          <code>
+            Dom.query("input[type='text']").on("change", function() {
+            // validation code
+            });
+          </code>
+        </example>
+      </selector>
+      <selector name="click" return="Dom">
+        <sample>click</sample>
+        <longdesc>Bind an event handler to the "click" JavaScript event, or trigger that event on an element.this event means user continuous trigger mousedown and mouseup events at same time.</longdesc>
+        <example>
+          <desc>Hide all paragraph when click the one of them. </desc>
+          <code>Dom.query("p").on('click', function () { Dom.query(this).hide(); });</code>
+        </example>
+      </selector>
+      <selector name="dblclick" return="Dom">
+        <sample>dblclick</sample>
+        <longdesc>Bind an event handler to the "dblclick" JavaScript event, or trigger that event on an element.</longdesc>
+        <example>
+          <desc>Alert "Hello World!" when double click one of paragraphs.</desc>
+          <code>Dom.query("p").dblclick( function () { alert("Hello World!"); });</code>
+        </example>
+      </selector>
+      <selector name="error" return="Dom">
+        <sample>error</sample>
+        <longdesc>
+          Bind an event handler to the "error" JavaScript event.
+          For more info about the error event:
+
+          &lt;a href="http://msdn2.microsoft.com/en-us/library/ms536930.aspx"&gt;msdn - onerror Event&lt;/a&gt;
+
+          &lt;a href="http://developer.mozilla.org/en/docs/DOM:window.onerror"&gt;Gecko DOM Reference - onerror Event&lt;/a&gt;
+
+          &lt;a href="http://developer.mozilla.org/en/docs/DOM:event"&gt;Gecko DOM Reference - Event object&lt;/a&gt;
+
+          &lt;a href="http://en.wikipedia.org/wiki/DOM_Events"&gt;Wikipedia: DOM Events&lt;/a&gt;
+        </longdesc>
+        <example>
+          <desc>Post error record to the server log.</desc>
+          <code>
+            Dom.query(window).on('error', function(msg, url, line){
+            JPlus.post("js_error_log.php", { msg: msg, url: url, line: line });
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Hide the error event</desc>
+          <code>
+            Dom.query(window).on('error', function(){
+            return true;
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Hide the error image:</desc>
+          <code>
+            Dom.query("img").on('error', function(){
+            Dom.query(this).hide();
+            });
+          </code>
+        </example>
+      </selector>
+      <selector name="focus" return="Dom">
+        <sample>focus</sample>
+        <desc>Bind an event handler to the "focus" JavaScript event, or trigger that event on an element.</desc>
+        <example>
+          <desc>Make the text field unavaliable:</desc>
+          <code>
+            Dom.query("input[type=text]").on('focus', function(){
+            this.blur();
+            });
+          </code>
+        </example>
+      </selector>
+      <selector name="focusin" return="Dom">
+        <sample>focusin</sample>
+        <desc>The focusin event is sent to an element when it, or any element inside of it, gains focus. This is distinct from the focus event in that it supports detecting the focus event on parent elements (in other words, it supports event bubbling). </desc>
+        <example>
+          <desc>Watch for a focus to occur within the paragraphs on the page</desc>
+          <html>
+            &lt;p&gt;&lt;input type=&quot;text&quot; /&gt; &lt;span&gt;focusout fire&lt;/span&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;input type=&quot;password&quot; /&gt; &lt;span&gt;focusout fire&lt;/span&gt;&lt;/p&gt;
+          </html>
+          <code>
+            Dom.query("p").on('focusin', function() {
+            this.find("span").setStyle('display','inline').hide(1000);
+            });
+          </code>
+        </example>
+      </selector>
+      <selector name="focusout" return="Dom">
+        <sample>focusout</sample>
+        <desc>The focusout event is sent to an element when it, or any element inside of it, loses focus. This is distinct from the blur event in that it supports detecting the loss of focus from parent elements (in other words, it supports event bubbling). </desc>
+        <example>
+          <desc>Watch for a loss of focus to occur inside paragraphs</desc>
+          <html>
+            &lt;p&gt;&lt;input type=&quot;text&quot; /&gt; &lt;span&gt;focusout fire&lt;/span&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;input type=&quot;password&quot; /&gt; &lt;span&gt;focusout fire&lt;/span&gt;&lt;/p&gt;
+          </html>
+          <code>
+            Dom.query("p").on('focusout', function() {
+              this.find("span").setStyle('display','inline').hide(1000);
+            });
+          </code>
+        </example>
+      </selector>
+      <selector name="keydown" return="Dom">
+        <sample>keydown</sample>
+        <desc>Bind an event handler to the "keydown" JavaScript event, or trigger that event on an element. </desc>
+        <example>
+          <desc>Add different functions according to the keyCode when a key is pressed.</desc>
+          <code>
+            Dom.query(window).on('keydown', function(event){
+            switch(event.keyCode) {
+               different code for the specified keys...
+            }
+            });
+          </code>
+        </example>
+      </selector>
+      <selector name="keypress" return="Dom">
+        <sample>keypress</sample>
+        <desc>Bind an event handler to the "keypress" JavaScript event, or trigger that event on an element.
+        </desc>
+      </selector>
+      <selector name="keyup" return="Dom">
+        <sample>keyup</sample>
+        <desc>keBind an event handler to the "keyup" JavaScript event, or trigger that event on an element. </desc>
+      </selector>
+      <selector name="load" return="Dom">
+        <sample>load</sample>
+        <desc>Bind an event handler to the "load" JavaScript event. </desc>
+        <desc>Please don't bind load event in ready event. 
+        </desc>
+        <params name="fn" type="Function">
+          <desc>A function to execute when the event is triggered.</desc>
+        </params>
+      </selector>
+      <selector name="mousedown" return="Dom">
+        <sample>mousedown</sample>
+        <desc>Bind an event handler to the "mousedown" JavaScript event, or trigger that event on an element.</desc>
+      </selector>
+      <selector name="mousemove" return="Dom">
+        <sample>mousemove</sample>
+        <desc>Bind an event handler to the "mousemove" JavaScript event, or trigger that event on an element.</desc>
+      </selector>
+      <selector name="mouseout" return="Dom">
+        <sample>mouseout</sample>
+        <desc>Bind an event handler to the "mouseout" JavaScript event, or trigger that event on an element.</desc>
+      </selector>
+      <selector name="mouseover" return="Dom">
+        <sample>mouseover</sample>
+        <desc>Bind an event handler to the "mouseover" JavaScript event, or trigger that event on an element.</desc>
+    </selector>
+      <selector name="mouseup" return="Dom">
+        <sample>mouseup</sample>
+        <desc>Bind an event handler to the "mouseup" JavaScript event, or trigger that event on an element.</desc>
+      </selector>
+      <selector name="resize" return="Dom">
+        <sample>resize</sample>
+        <desc>Bind an event handler to the "resize" JavaScript event, or trigger that event on an element.</desc>
+      </selector>
+      <selector name="scroll" return="Dom">
+        <sample>scroll</sample>
+        <desc>Bind an event handler to the "scroll" JavaScript event, or trigger that event on an element.</desc>
+      </selector>
+      <selector name="select" return="Dom">
+        <sample>select</sample>
+        <desc>Bind an event handler to the "select" JavaScript event, or trigger that event on an form element. </desc>
+      </selector>
+      <selector name="submit" return="Dom">
+        <sample>submit</sample>
+        <desc>Bind an event handler to the "submit" JavaScript event, or trigger that event on an form.</desc>
+        <example>
+          <desc>Prevent the submit event of forms:</desc>
+          <code>
+            Dom.query("form").on('submit', function () {
+            return false;
+            } );
+          </code>
+        </example>
+      </selector>
+      <selector name="unload" return="Dom">
+        <sample>unload</sample>
+        <desc>Bind an event handler to the "unload" JavaScript event. </desc>
+        <params name="fn" type="Function">
+          <desc>A function to execute when the event is triggered. </desc>
+        </params>
+        <example>
+          <desc>To display an alert when a page is unloaded:</desc>
+          <code>Dom.query(window).on('unload', function () { alert("Bye now!"); } );</code>
+        </example>
+      </selector>
+    </subcat>
+  </cat>
+  <cat value="Effects">
+    <subcat value="Basics">
+      <function name="show" return="Dom">
+        <desc>Display the matched elements. </desc>
+        <example>
+          <desc>Show all the paragraph</desc>
+          <html>&lt;p style="display: none"&gt;Hello&lt;/p&gt;</html>
+          <code>Dom.query("p").show()</code>
+        </example>
+      </function>
+      <function name="show" return="Dom">
+        <desc>Display the matched elements by fading them to opaque. </desc>
+        <params name="speed" type="String,Number">
+          <desc>A string or number determining how long the animation will run.</desc>
+        </params>
+        <params name="callback" type="Function" optional="true">
+          <desc>A function to call once the animation is complete.</desc>
+        </params>
+        <example>
+          <desc>Animates hidden paragraph, completing each animation within 600 milliseconds. </desc>
+          <html>&lt;p style="display: none"&gt;Hello&lt;/p&gt;</html>
+          <code>Dom.query("p").show("slow");</code>
+        </example>
+        <example>
+          <desc>Fades paragraphs within 200 milliseconds . Once the animation is done, changes the text to "Animation Done!".</desc>
+          <html>&lt;p style="display: none"&gt;Hello&lt;/p&gt;</html>
+          <code>
+            Dom.query("p").show("fast",function(){
+            Dom.query(this).text("Animation Done!");
+            });
+          </code>
+        </example>
+      </function>
+      <function name="hide" return="Dom">
+        <desc>Hide the matched elements.</desc>
+        <example>
+          <desc>Hide all paragraphs.</desc>
+          <code>Dom.query("p").hide()</code>
+        </example>
+      </function>
+      <function name="hide" return="Dom">
+        <desc>Hide the matched elements by fading them to transparent.</desc>
+        <params name="speed" type="String,Number">
+          <desc>A string or number determining how long the animation will run.</desc>
+        </params>
+        <params name="callback" type="Function" optional="true">
+          <desc>A function to call once the animation is complete.</desc>
+        </params>
+        <example>
+          <desc>Animates all paragraphs to fade out, completing the animation within 600 milliseconds.</desc>
+          <code>Dom.query("p").hide("slow");</code>
+        </example>
+        <example>
+          <desc>Fades paragraphs within 200 milliseconds . Once the animation is done, alert "Animation Done!".</desc>
+          <code>
+            Dom.query("p").hide("fast",function(){
+            alert("Animation Done.");
+            });
+          </code>
+        </example>
+      </function>
+      <function name="toggle" return="Dom">
+        <desc>Switch the visible of the matched elements. </desc>
+        <longdesc>If the element is visible, changes it to hidden;If the element is hidden, changes it to visible. </longdesc>
+        <example>
+          <desc>Swith the visible of all paragraph. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p style="display: none"&gt;Hello Again&lt;/p&gt;</html>
+          <code>Dom.query("p").toggle()</code>
+          <result>&lt;p tyle="display: none"&gt;Hello&lt;/p&gt;&lt;p style="display: block"&gt;Hello Again&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="toggle" return="Dom">
+        <desc>A Boolean indicating whether to show or hide the elements. </desc>
+        <longdesc>If the switch is true, it will call show()，otherwise calls hide(). </longdesc>
+        <params name="switch" type="Boolean">
+          <desc>True to show, false to hide</desc>
+        </params>
+        <example>
+          <desc>Toggles all paragraphs. </desc>
+          <html>&lt;p&gt;Hello&lt;/p&gt;&lt;p style="display: none"&gt;Hello Again&lt;/p&gt;</html>
+          <code>
+            var flip = 0;
+            Dom.query("button").click(function () {
+            Dom.query("p").toggle( flip++ % 2 == 0 );
+            });
+          </code>
+          <result>&lt;p tyle="display: none"&gt;Hello&lt;/p&gt;&lt;p style="display: block"&gt;Hello Again&lt;/p&gt;</result>
+        </example>
+      </function>
+      <function name="toggle" return="Dom">
+        <desc>Display or hide the matched elements by animation </desc>
+        <params name="speed" type="String,Number">
+          <desc>A string or number determining how long the animation will run.</desc>
+        </params>
+        <params name="callback" type="Function" optional="true">
+          <desc>A function to call once the animation is complete. </desc>
+        </params>
+        <example>
+          <desc>Animates all paragraphs to be shown if they are hidden and hidden if they are visible, completing the animation within 600 milliseconds.</desc>
+          <code>Dom.query("p").toggle("slow");</code>
+        </example>
+        <example>
+          <desc>Toggles all paragraphs，alert "Done" once the animation is done. </desc>
+          <code>
+            Dom.query("p").toggle("fast",function(){
+            alert("Animation Done.");
+            });
+          </code>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Custom">
+      <function name="animate" return="Dom">
+        <desc> Perform a custom animation of a set of CSS properties. </desc>
+        <params name="params" type="Options">
+          <desc>A map of CSS properties that the animation will move toward.</desc>
+        </params>
+        <params name="duration" type="String,Number" optional="true">
+          <desc>A string ("slow", "normal", or "fast") or number determining how long the animation will run.</desc>
+        </params>
+        <params name="easing" type="String" optional="true">
+          <desc>A string indicating which easing function to use for the transition, supported by plugin.JPlus only provide "linear" 和 "swing".</desc>
+        </params>
+        <params name="callback" type="Function" optional="true">
+          <desc>A function to call once the animation is complete.</desc>
+        </params>
+        <example>
+          <desc>Click the button to animate the div with a number of different properties.</desc>
+          <html>
+            &lt;button id="go"&gt; Run&lt;/button&gt;
+            &lt;div id="block"&gt;Hello!&lt;/div&gt;
+          </html>
+          <code>
+            Dom.query("#go").click(function(){
+            Dom.query("#block").animate({
+            width: "90%",
+            height: "100%",
+            fontSize: "10em",
+            borderWidth: 10
+            }, 1000 );
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Animates a div's left property with a relative value. Click several times on the buttons to see the relative animations queued up.</desc>
+          <html>
+            &lt;button id="left"&gt;«&lt;/button&gt; &lt;button id="right"&gt;»&lt;/button&gt;
+            &lt;div class="block"&gt;&lt;/div&gt;
+          </html>
+          <code>
+            Dom.query("#right").click(function(){
+            Dom.query(".block").animate({left: '+50px'}, "slow");
+            });
+
+            Dom.query("#left").click(function(){
+            Dom.query(".block").animate({left: '-50px'}, "slow");
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Animate all paragraphs to toggle both height and opacity, completing the animation within 600 milliseconds.</desc>
+          <code>
+            Dom.query("p").animate({
+            height: 'toggle', opacity: 'toggle'
+            }, "slow");
+          </code>
+        </example>
+        <example>
+          <desc>Animate all paragraphs to a left style of 50 and opacity of 1 (opaque, visible), completing the animation within 500 milliseconds.</desc>
+          <code>
+            Dom.query("p").animate({
+            left: 50, opacity: '500'
+            }, 500);  
+          </code>
+        </example>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="Ajax">
+    <subcat value="Ajax 请求">
+      <function name="Ajax.send" return="Ajax">
+        <desc>Perform a HTTP (Ajax) request. </desc>
+        <longdesc>
+          The Ajax.send() function underlies all Ajax requests sent by jPlus. It is often unnecessary to directly call this function, as several higher-level alternatives like Ajax.get() and Ajax.post() are available and are easier to use. If less common options are required, though, Ajax.send() can be used more flexibly.
+        </longdesc>
+        <params name="options" type="Object" optional="true">
+          <desc>A set of key/value pairs that configure the Ajax request. All settings are optional. </desc>
+        </params>
+        <option name="async" type="Boolean">
+          <desc>By default, all requests are sent asynchronously (i.e. this is set to true by default). If you need synchronous requests, set this option to false. Cross-domain requests and dataType: "jsonp" requests do not support synchronous operation. </desc>
+        </option>
+        <option name="beforeSend(XHR)" type="Function">
+          <desc>
+            A pre-request callback function that can be used to modify the xhr object before it is sent.
+          </desc>
+        </option>
+        <option name="cache" type="Boolean">
+          <desc>Default: true,if dataType is script or jsonp时, default to false </desc>
+        </option>
+        <option name="complete(XHR, TS)" type="Function">
+          <desc>
+            A function to be called when the request finishes (after success and error callbacks are executed). 
+          </desc>
+        </option>
+        <option name="contentType" type="String">
+          <desc>When sending data to the server, use this content type. Default is "application/x-www-form-urlencoded; charset=UTF-8", which is fine for most cases.</desc>
+        </option>
+        <option name="context" type="Object">
+          <desc>This object will be made the context of all Ajax-related callbacks. By default, the context is an object that represents the ajax settings used in the call
+          </desc>
+        </option>
+        <option name="data" type="Object,String">
+          <desc>Data to be sent to the server. It is converted to a query string, if not already a string. It's appended to the url for GET-requests.  </desc>
+        </option>
+        <option name="dataFilter" type="Function">
+          <desc>
+            A function to be used to handle the raw response data of XMLHttpRequest.This is a pre-filtering function to sanitize the response. You should return the sanitized data. The function accepts two arguments: The raw data returned from the server and the 'dataType' parameter.
+          </desc>
+        </option>
+        <option name="dataType" type="String">
+          <desc>
+            &lt;p&gt;The type of data that you're expecting back from the server. . The available types are: &lt;/p&gt;
+            &lt;p&gt;"xml": Returns a XML document that can be processed via jPlus. &lt;/p&gt;
+            &lt;p&gt;"html": Returns HTML as plain text; included script tags are evaluated when inserted in the DOM. &lt;/p&gt;
+            &lt;p&gt;"script": Evaluates the response as JavaScript and returns it as plain text. Disables caching by appending a query string parameter, "_=[TIMESTAMP]", to the URL unless the cache option is set to true. Note: This will turn POSTs into GETs for remote-domain requests.&lt;/p&gt;
+            &lt;p&gt;"json": Evaluates the response as JSON and returns a JavaScript object.  . &lt;/p&gt;
+            &lt;p&gt;"jsonp": Loads in a JSON block using JSONP.  &lt;/p&gt;
+            &lt;p&gt;"text": A plain text string.&lt;/p&gt;
+          </desc>
+        </option>
+        <option name="error" type="Function">
+          <desc>
+            A function to be called if the request fails. 
+          </desc>
+        </option>
+        <option name="global" type="Boolean">
+          <desc>Whether to trigger global Ajax event handlers for this request. The default is true. </desc>
+        </option>
+        <option name="ifModified" type="Boolean">
+          <desc>Default value is false.Allow the request to be successful only if the response has changed since the last request. This is done by checking the Last-Modified header. </desc>
+        </option>
+        <option name="jsonp" type="String">
+          <desc>Override the callback function name in a jsonp request. </desc>
+        </option>
+        <option name="jsonpCallback" type="String">
+          <desc>为jsonp请求指定一个回调method名. 这个值将用来取代JPlus自动生成的随机method名. 这主要用来让JPlus生成度独特的method名，这样管理请求更容易，也能方便地提供回调method和错误处理. 你也可以在想让浏览器缓存GET请求的时候，指定这个回调method名. </desc>
+        </option>
+        <option name="password" type="String">
+          <desc>A password to be used in response to an HTTP access authentication request.</desc>
+        </option>
+        <option name="processData" type="Boolean">
+          <desc>(Default: true) By default, data passed in to the data option as an object (technically, anything other than a string) will be processed and transformed into a query string, fitting to the default content-type "application/x-www-form-urlencoded". If you want to send a DOMDocument, or other non-processed data, set this option to false.</desc>
+        </option>
+        <option name="scriptCharset" type="String">
+          <desc>Only for requests with "jsonp" or "script" dataType and "GET" type. Forces the request to be interpreted as a certain charset. Only needed for charset differences between the remote and local content. </desc>
+        </option>
+        <option name="success" type="Function">
+          <desc>
+            A function to be called if the request succeeds. 
+          </desc>
+        </option>
+        <option name="traditional" type="Boolean">
+          <desc>Set this to true if you wish to use the traditional style of JPlus.param serialization. </desc>
+        </option>
+        <option name="timeout" type="Number">
+          <desc>Set a timeout (in milliseconds) for the request.</desc>
+        </option>
+        <option name="type" type="String">
+          <desc>(Default: 'GET') The type of request to make ("POST" or "GET"), default is "GET". Note: Other HTTP request methods, such as PUT and DELETE, can also be used here, but they are not supported by all browsers. </desc>
+        </option>
+        <option name="url" type="String">
+          <desc>(Default: The current page) A string containing the URL to which the request is sent. </desc>
+        </option>
+        <option name="username" type="String">
+          <desc>A username to be used in response to an HTTP access authentication request.</desc>
+        </option>
+        <option name="xhr" type="Function">
+          <desc>Callback for creating the XMLHttpRequest object. Defaults to the ActiveXObject when available (IE), the XMLHttpRequest otherwise. Override to provide your own implementation for XMLHttpRequest or enhancements to the factory. </desc>
+        </option>
+        <example>
+          <desc> Load and execute a JavaScript file. </desc>
+          <code>
+            Ajax.send({
+            type: "GET",
+            url: "test.js",
+            dataType: "script"
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Save some data to the server and notify the user once it's complete. </desc>
+          <code>
+            Ajax.send({
+            type: "POST",
+            url: "some.php",
+            data: "name=John&amp;location=Boston",
+            success: function(msg){
+            alert( "Data Saved: " + msg );
+            }
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Retrieve the latest version of an HTML page. </desc>
+          <code>
+            Ajax.send({
+            url: "test.html",
+            cache: false,
+            success: function(html){
+            Dom.query("#results").append(html);
+            }
+            });
+          </code>
+        </example>
+        <example>
+          <desc>Load data in synchronous way </desc>
+          <code>
+            var html = Ajax.send({
+            url: "some.php",
+            async: false
+            }).responseText;
+          </code>
+        </example>
+        <example>
+          <desc>Send an xml document as data to the server. By setting the processData option to false, the automatic conversion of data to strings is prevented. </desc>
+          <code>
+            var xmlDocument = [create xml document];
+            Ajax.send({
+            url: "page.php",
+            processData: false,
+            data: xmlDocument,
+            success: handleResponse
+            });
+          </code>
+        </example>
+      </function>
+      <function name="Ajax.get" return="Ajax">
+        <desc>Load data from the server using a HTTP GET request. HTTP GET 请求载入信息. </desc>
+        <longdesc>This is a shorthand Ajax function. </longdesc>
+        <params name="url" type="String">
+          <desc>A string containing the URL to which the request is sent.</desc>
+        </params>
+        <params name="data" type="Map" optional="true">
+          <desc>A map or string that is sent to the server with the request.</desc>
+        </params>
+        <params name="onsuccess（callback）" type="Function" optional="true">
+          <desc>A callback function that is executed if the request succeeds. </desc>
+        </params>
+        <params name="onerror（callback）" type="Function" optional="true">
+          <desc>A callback function that is executed if the request failed. </desc>
+        </params>
+         <params name="oncomplete（callback）" type="Function" optional="true">
+          <desc>A callback function that is executed if the request completed. </desc>
+        </params>
+        <params name="timeouts" type="Int" optional="true">
+          <desc>A callback function that is executed if the request timeout. </desc>
+        </params>
+        <example>
+          <desc>Request the test.php page, but ignore the return results. </desc>
+          <code>Ajax.get("test.php", { name: "John", time: "2pm" } );</code>
+        </example>
+        <example>
+          <desc>Alert the returns from test.php ,bind events of onerror,oncomplete. </desc>
+          <code>
+            Ajax.get("test.php",null,
+            function(data){
+            //success
+            alert("Data Loaded: " + data);
+            },function(error){
+            //error
+            },
+            1000,function(){
+            //complete
+            });
+          </code>
+        </example>
+      </function>
+      <function name="Ajax.jsonp" return="Ajax">
+        <desc>Load JSON-encoded data from the server using a GET HTTP request. </desc>
+        <params name="url" type="String">
+          <desc>A string containing the URL to which the request is sent. </desc>
+        </params>
+        <params name="data" type="Map" optional="true">
+          <desc>A map or string that is sent to the server with the request. </desc>
+        </params>
+        <params name="callbacks" type="Function" optional="true">
+          <desc>See also Ajax.get()</desc>
+        </params>
+        <example>
+          <desc> Load the JSON data from test.js and access a name from the returned JSON data. </desc>
+          <code>
+            Ajax.jsonp("test.js", function(json){
+            alert("JSON Data: " + json.users[3].name);
+            });
+          </code>
+        </example>
+      </function>
+      <function name="Ajax.post" return="Ajax">
+        <desc>Load data from the server using a HTTP POST request.</desc>
+        <params name="url" type="String">
+          <desc>A string containing the URL to which the request is sent. </desc>
+        </params>
+        <params name="data" type="Map" optional="true">
+          <desc>A map or string that is sent to the server with the request. </desc>
+        </params>
+        <params name="callbacks" type="Function" optional="true">
+          <desc>See also Ajax.get()</desc>
+        </params>
+        <params name="type" type="String" optional="true">
+          <desc>The type of data expected from the server. Default: Intelligent Guess (xml, json, script, text, html).</desc>
+        </params>
+      </function>
+    </subcat>
+  </cat>
+  <cat value="Utilities">
+    <subcat value="Array and Object">
+      <function name="Object.isArray" return="Boolean">
+        <desc>Determine whether the argument is an array. </desc>
+        <params name="obj" type="Object">
+          <desc>Object to test whether or not it is an array.</desc>
+        </params>
+        <example>
+          <desc>Finds out if the parameter is an array.</desc>
+          <code>Dom.query("b").append( " + Array.isArray([]) );</code>
+          <result>&lt;b&gt;true&lt;/b&gt;</result>
+        </example>
+      </function>
+      <function name="Object.each" return="Object">
+        <desc> A generic iterator function, which can be used to seamlessly iterate over both objects and arrays. </desc>
+        <longdesc>The Object.each() function is not the same as Dom.query(selector).each(), which is used to iterate, exclusively, over an encapsulated Dom object. The Object.each() function can be used to iterate over any collection, whether it is a map (JavaScript object) or an array. </longdesc>
+        <params name="collection" type="Object/Array">
+          <desc>The object or array to iterate over.</desc>
+        </params>
+        <params name="callback" type="Function" optional="true">
+          <desc>The function that will be executed on every object.</desc>
+        </params>
+        <example>
+          <desc>Iterates through the array displaying each index and content </desc>
+          <code>
+            Object.each( [0,1,2], function(i, n){
+            alert( "Item #" + i + ": " + n );
+            });
+          </code>
+        </example>
+        <example>
+          <desc> Iterates over the properties in an object, accessing both the current item and its key.</desc>
+          <code>
+            Object.each( { name: "John", lang: "JS" }, function(i, n){
+            alert( "Name: " + i + ", Value: " + n );
+            });
+          </code>
+        </example>
+      </function>
+      <function name="arr.indexOf" return="Number">
+        <desc>Get the index of the specified item in an array. Start from 0 , returns -1 if nothing found. </desc>
+        <params name="value" type="Any">
+          <desc>The value need to be found</desc>
+        </params>
+        <params name="array" type="Array">
+          <desc>The array where to find the value. </desc>
+        </params>
+        <example>
+          <desc>Check the specified value in an array.</desc>
+          <code>
+            var arr = [ 4, "Pete", 8, "John" ];
+            arr.indexOf("John", );  //3
+            arr.indexOf(4);  //0
+            arr.indexOf("David");  //-1
+          </code>
+        </example>
+      </function>
+      <function name="arr.unique" return="Array">
+        <desc>Sorts an array of DOM elements, in place, with the duplicates removed. Note that this only works on arrays of DOM elements, not strings or numbers.</desc>
+        <params name="array" type="Array">
+          <desc>The Array of DOM elements. </desc>
+        </params>
+        <example>
+          <desc>Removes any duplicate elements from the array of divs. </desc>
+          <code>document.query("div").unique();</code>
+          <result>[&lt;div&gt;, &lt;div&gt;, ...]</result>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="String">
+      <function name="str.trim" return="String">
+        <desc>Remove the whitespace from the beginning and end of a string. </desc>
+        <params name="str" type="String">
+          <desc>The string to trim.</desc>
+        </params>
+        <example>
+          <desc>Remove the two white spaces at the start and at the end of the string. </desc>
+          <code>"  hello, how are you?  ".trim();</code>
+          <result>"hello, how are you?"</result>
+        </example>
+      </function>
+    </subcat>
+    <subcat value="Method">
+      <function name="Object.isFunction" return="Boolean">
+        <desc>Determine whether the argument is a function. </desc>
+        <params name="obj" type="Object">
+          <desc>Object to test whether or not it is a function.</desc>
+        </params>
+        <example>
+          <desc>Determine whether the following objects are funcion or not.</desc>
+          <code>
+            function stub() {
+            }
+            var objs = [
+            function () {},
+            { x:15, y:20 },
+            null,
+            stub,
+            "function"
+            ];
+            Control.each(objs, function (i) {
+            var isFunc = Function.isFunction(objs[i]);
+            Dom.query("span").setText(isFunc);
+            });
+          </code>
+          <result>[ true,false,false,true,false ]</result>
+        </example>
+      </function>
+      <property name="Function.empty" return="Array">
+        <desc>An empty function</desc>
+      </property>
+    </subcat>
+    <subcat value="browser">
+      <property name="navigator.isXXX" return="Object">
+        <desc>Detemine the version of broswer. Based on navigator.userAgent. </desc>
+        <longdesc></longdesc>
+        <example>
+          <desc>Detemine the browser is IE or IE6</desc>
+          <code>navigator.isIE</code>
+          <code>navigator.isIE6</code>
+        </example>
+      </property>
+      <property name="navigator.name" return="Map">
+        <desc>Get the core flag of broswer. Based on navigator.userAgent. </desc>
+      </property>
+      <property name="navigator.version" return="String">
+        <desc>Get the version of current browser. </desc>
+        <example>
+          <desc>Get the version of IE. </desc>
+          <code>
+            if ( navigator.msie )
+            alert( navigator.version );
+          </code>
+        </example>
+      </property>
+    </subcat>
+  </cat>
+<!--   <cat value="教程">
+    <subcat value="3小时上手 J+ Core">
+      <selector name="studySummary">
+        <sample>1. 简介</sample>
+        <longdesc>
+          <![CDATA[
+			jPlusUI.Core 是从 jPlusUI 分离出来的 Javascript 底层开发框架. 它提供了 DOM 操作、常用工具method、AJAX、特效四方面的功能. 相对于其它同类型的框架， J+ Core 具有下列特点： <br>
+			<ul>
+				<li>轻量但全能：全库普通压缩后为 64K (jQuery 为 115k, Mootools 为 92k)</li>
+				<li>无额外功能，效率高. </li>
+				<li>完全面向object：易扩展、可读性强. 为 UI 组件开发提供贴心的支持. </li>
+				<li>更贴近国内需求的接口设计. </li>
+				<li>兼容包括IE6的全浏览器，但不支持怪癖模式. </li>
+			</ul>
+		]]>
+        </longdesc>
+      </selector>
+      <selector name="studyHelloWorld">
+        <sample>2. Hello world</sample>
+        <longdesc>
+          <![CDATA[
+			<p>
+			首先下载 jplus-core.js， 并放到服务器相关目录. 
+			</p>
+			
+			<p>
+			然后使用如下代码引入 JS：
+			</p>
+			
+			<pre><code>&lt;script src="path/to/jplus-core.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+			
+			<p>
+				然后插入如下测试代码：
+			</p>
+			
+			<pre><code>&lt;script type="text/javascript"&gt;
+	alert(typeof Dom);
+&lt;/script&gt;</code></pre>
+			
+			<p>如果输出的不是 undefined ,则说明一切正常. </p>
+		]]>
+        </longdesc>
+      </selector>
+      <selector name="studyDom">
+        <sample>3. DOM 处理</sample>
+        <longdesc>
+          <![CDATA[
+			<p>
+			 J+ 用于处理DOM元素的两大object是 Dom object 和 DomList object. 其中，Dom object也叫 Control object，它是对单一的原生DOM节点的封装，而 DomList 则是对任意个原生的DOM节点的封装. 
+			</p>
+			<p>
+			 比如执行 var a = Dom.get('id'); 返回的 a 就是一个 Dom object.  a.dom 就是其封装的原生DOM object. 所有的DOM处理method都是a的成员，比如 a.addClass('cls'); ，addClass 内部会访问 a.dom.className 属性来实现它的功能. 
+			</p>
+			<p>
+			 DomList object和 Dom object的方法是一样的，但它是将原生DOMobject以类似数组的方式来存储的. 比如
+			 var a = Dom.query('.cls'); 返回的 a 就是一个 DomList object. a[0] 对应了封装的第一个原生DOMobject. 调用 a.addClass('cls') 会对其每个节点都调用一次 addClass 操作. DomList 的获取和设置操作都是对全部元素有效的. 当获取 DomList 的属性时，返回的是一个数组. 
+			</p>
+			<p>
+			 只要掌握如何在原生的DOM节点，原生的NodeListobject，Dom object和 DomList object之间互相转换，就可以轻松驾驭DOM处理了. 
+			</p>
+			<p>
+				比如： 
+			</p>
+			 <ul>
+				<li>document.body 就是一个原生的DOMobject. </li>
+				<li>document.getElementsByTagName('div') 就是一个原生的NodeListobject</li>
+				<li>调用 Dom.get() 就将任何原生DOMobject包装成 Dom object. </li>
+				<li>调用 Dom.query() 就可以将任何原生的NodeListobject包装成 DomList object. </li>
+				<li>调用 Dom.get().dom 就可以返回原生的DOM节点. </li>
+				<li>调用 Dom.query()[0] 就可以返回原生的DOM节点. </li>
+		     </ul>
+			 
+			 <p>
+				document object被认为是一个已经被包装过的 Dom object，所有和全局有关的操作都通过 document 访问. 比如获取文档的大小： document.getSize();
+			 </p>
+				
+			 <p>
+				Dom.get 被缩写为 $$ , Dom.query 被缩写为 $. 如果这2个符合已经被使用，而J+不会强制覆盖. 
+			 </p>
+				
+			 <p>
+				根据以上总结，一个DOM处理method最终是这个样子的：
+				<pre><code>$Dom.query('id').addClass('class-to-add').setStyle('color', 'red'); // 单一节点操作，效率最高. </code></pre>
+				<pre><code>Dom.query('div.cls').addClass('class-to-add').setStyle('color', 'red'); // 多节点同时操作，使用方便. </code></pre>
+			 </p>
+		]]>
+        </longdesc>
+      </selector>
+    </subcat>
+  </cat> -->
+<!--   <cat value="关于">
+    <subcat value="关于翻译">
+      <selector name="aboutXMLDoc">
+        <sample>原文档关于</sample>
+        <longdesc><![CDATA[原文档XML文件内英文及代码部分版权归原官方wiki所有，中文部分分属<a href="http://www.cn-cuckoo.com/">为之漫笔</a>, <a href="http://shawphy.com">Shawphy</a> and <a href="http://cloudream.name">Cloudream</a>所有. 欢迎转载、替换其他XSL样式或其他形式的转载，但必须保证XML文件原样转载，保留署名以及不可用于商业用途. 本文档仅供参考，出于方便学习的目的而分发. 使用者必须自行承担风险，因使用此文档造成的任何损失或者潜在的损失，译者均不为其负责. ]]></longdesc>
+      </selector>
+    </subcat>
+    <subcat value="提交bug及获取更新">
+      <selector name="bugAndUpdate">
+        <sample>提交bug及获取更新</sample>
+        <longdesc>
+          <![CDATA[<p>如果大家使用过程中发现了什么错误，可以找到项目地址 <a href="https://github.com/jplusui/jplus-milk/issues">http://github.com/jplusui/jplus-milk</a>  来反馈.   </p>
+]]>
+        </longdesc>
+      </selector>
+    </subcat>
+  </cat> -->
+</docs>
+
