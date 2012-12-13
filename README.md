@@ -16,7 +16,7 @@
 1. The base core is as low as 4k with gzip
 2. All UI controls with lightweight package.
 3. Object-Oriented based design which makes widgets easily extend, inheritance.That’s best for the complex web applications.
-4. the base UI framework can import third framework for base support, even jquery
+4. The underlies UI framework can import third framework for base support, even jquery
 5. Performance advantages, see speed match
 
 
