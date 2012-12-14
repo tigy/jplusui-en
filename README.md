@@ -19,6 +19,9 @@
 4. The underlies UI framework can import third framework for base support, even jquery
 5. Performance advantages, see speed match
 
+View the [jPlus UI](http://jplusui.github.com/jplusui-en/)  in english.
+View the [documentation](http://jplusui.github.com/jplusui-en/resources/cookbooks/jplusui-core-api/index.html) .
+
 
 
 
